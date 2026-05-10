@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Maison — Бронирование столов</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div class="header__inner">
+    <div class="logo">✦ La Maison</div>
+    <nav class="nav">
+      <a href="#about">О ресторане</a>
+      <a href="#booking" class="nav--active">Бронирование</a>
+      <a href="admin.html">Для персонала</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="about">
+  <div class="hero__content">
+    <p class="hero__sub">Изысканная кухня в сердце города</p>
+    <h1 class="hero__title">La Maison</h1>
+    <p class="hero__desc">Забронируйте стол онлайн и наслаждайтесь вечером без ожидания</p>
+    <a href="#booking" class="btn btn--gold">Забронировать стол</a>
+  </div>
+</section>
+
+<!-- ═══ BOOKING ═══ -->
+<section class="booking" id="booking">
+  <div class="container">
+    <h2 class="section-title">Выберите стол</h2>
+
+    <!-- Параметры -->
+    <div class="booking__params">
+      <div class="field">
+        <label for="res-date">Дата</label>
+        <input type="date" id="res-date" />
+      </div>
+      <div class="field">
+        <label for="res-time">Время</label>
+        <input type="time" id="res-time" value="19:00" min="10:00" max="23:00" />
+      </div>
+      <div class="field">
+        <label for="res-duration">Продолжительность</label>
+        <select id="res-duration">
+          <option value="60">1 час</option>
+          <option value="90">1,5 часа</option>
+          <option value="120" selected>2 часа</option>
+          <option value="180">3 часа</option>
+          <option value="240">4 часа</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="res-guests">Гостей</label>
+        <input type="number" id="res-guests" value="2" min="1" max="20" />
+      </div>
+    </div>
+
+    <!-- Схема зала -->
+    <div class="hall-wrap">
+      <div class="hall-header">
+        <h3>Схема зала</h3>
+        <div class="legend">
+          <span class="legend__item legend__item--free">Свободен</span>
+          <span class="legend__item legend__item--busy">Занят</span>
+          <span class="legend__item legend__item--selected">Выбран</span>
+        </div>
+      </div>
+
+      <div class="hall" id="hall">
+        <div class="hall__zone-label hall__zone-label--main">Основной зал</div>
+        <div class="hall__zone-label hall__zone-label--terrace">Терраса</div>
+        <div class="hall__zone-label hall__zone-label--vip">VIP-зал</div>
+        <div class="hall__divider hall__divider--v"></div>
+        <div class="hall__divider hall__divider--h"></div>
+        <!-- Столы генерируются JS -->
+      </div>
+
+      <div id="hall-loading" class="hall__loading">Загрузка схемы зала…</div>
+    </div>
+
+    <!-- Форма бронирования (появляется после выбора стола) -->
+    <div class="booking-form" id="booking-form" style="display:none;">
+      <div class="booking-form__header">
+        <h3>Оформление бронирования</h3>
+        <div id="selected-info" class="booking-form__info"></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field field--full">
+          <label for="f-name">Фамилия и имя *</label>
+          <input type="text" id="f-name" placeholder="Иванова Мария Сергеевна" required />
+        </div>
+        <div class="field">
+          <label for="f-phone">Телефон *</label>
+          <input type="tel" id="f-phone" placeholder="+7 900 000-00-00" required />
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail *</label>
+          <input type="email" id="f-email" placeholder="mail@example.com" required />
+        </div>
+        <div class="field field--full">
+          <label for="f-request">Особые пожелания</label>
+          <textarea id="f-request" rows="3" placeholder="Аллергия, украшение стола, детский стул…"></textarea>
+        </div>
+      </div>
+
+      <div class="booking-form__actions">
+        <button class="btn btn--outline" id="btn-cancel-table">← Выбрать другой стол</button>
+        <button class="btn btn--gold" id="btn-submit">Забронировать</button>
+      </div>
+
+      <div id="form-msg" class="form-msg" style="display:none;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <p>© 2026 La Maison · Все права защищены</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

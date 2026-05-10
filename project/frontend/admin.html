@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Maison — Панель администратора</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="admin-body">
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-card__logo">✦ La Maison</div>
+    <h2 class="login-card__title">Вход для персонала</h2>
+    <div class="field">
+      <label for="l-login">Логин</label>
+      <input type="text" id="l-login" value="admin" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="l-pass">Пароль</label>
+      <input type="password" id="l-pass" autocomplete="current-password" />
+    </div>
+    <button class="btn btn--gold btn--full" id="btn-login">Войти</button>
+    <div id="login-err" class="form-msg form-msg--error" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL ═══ -->
+<div id="admin-panel" class="admin-panel" style="display:none;">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo">✦ La Maison</div>
+    <nav class="sidebar__nav">
+      <button class="sidebar__item sidebar__item--active" data-view="dashboard">📊 Дашборд</button>
+      <button class="sidebar__item" data-view="reservations">📋 Бронирования</button>
+    </nav>
+    <button class="sidebar__logout" id="btn-logout">Выйти</button>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="admin-view">
+      <h2 class="admin-view__title">Дашборд</h2>
+      <div class="stats-grid">
+        <div class="stat-card stat-card--gold">
+          <div class="stat-card__val" id="stat-total">—</div>
+          <div class="stat-card__label">Активных бронирований</div>
+        </div>
+        <div class="stat-card stat-card--blue">
+          <div class="stat-card__val" id="stat-today">—</div>
+          <div class="stat-card__label">Бронирований сегодня</div>
+        </div>
+        <div class="stat-card stat-card--orange">
+          <div class="stat-card__val" id="stat-pending">—</div>
+          <div class="stat-card__label">Ожидают подтверждения</div>
+        </div>
+        <div class="stat-card stat-card--green">
+          <div class="stat-card__val" id="stat-customers">—</div>
+          <div class="stat-card__label">Уникальных клиентов</div>
+        </div>
+        <div class="stat-card stat-card--purple">
+          <div class="stat-card__val" id="stat-zones">—</div>
+          <div class="stat-card__label">Зон зала</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVATIONS -->
+    <section id="view-reservations" class="admin-view" style="display:none;">
+      <div class="admin-view__header">
+        <h2 class="admin-view__title">Бронирования</h2>
+        <div class="filters">
+          <input type="date" id="f-date" class="filter-input" />
+          <select id="f-status" class="filter-input">
+            <option value="">Все статусы</option>
+            <option value="pending">Ожидает</option>
+            <option value="confirmed">Подтверждено</option>
+            <option value="completed">Завершено</option>
+            <option value="cancelled">Отменено</option>
+          </select>
+          <button class="btn btn--outline btn--sm" id="btn-filter">Применить</button>
+          <button class="btn btn--ghost btn--sm" id="btn-reset-filter">Сбросить</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="res-table" id="res-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Дата и время</th>
+              <th>Клиент</th>
+              <th>Телефон</th>
+              <th>Стол / зона</th>
+              <th>Гостей</th>
+              <th>Пожелания</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="res-tbody">
+            <tr><td colspan="9" class="table-empty">Загрузка…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

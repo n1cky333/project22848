@@ -1,0 +1,453 @@
+/* ════════════════════════════════════════════════
+   La Maison — Стили (тёмная тема + золото)
+   ════════════════════════════════════════════════ */
+
+:root {
+  --gold:    #c9a84c;
+  --gold-d:  #a07830;
+  --dark:    #0f172a;
+  --dark-2:  #1e293b;
+  --dark-3:  #162032;
+  --border:  rgba(201,168,76,.25);
+  --text:    #e2e8f0;
+  --text-2:  #94a3b8;
+  --radius:  8px;
+  --trans:   .2s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.6;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Кнопки ─────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 11px 28px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--trans);
+  border: none;
+  letter-spacing: .5px;
+}
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-d));
+  color: #1a1a2e;
+  font-weight: bold;
+}
+.btn--gold:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+}
+.btn--outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn--ghost { background: transparent; color: var(--text-2); }
+.btn--ghost:hover { color: var(--text); }
+.btn--full { width: 100%; text-align: center; }
+.btn--sm { padding: 7px 16px; font-size: 13px; }
+
+/* ── Поля формы ─────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: var(--text-2); letter-spacing: .5px; text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 13px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color var(--trans);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201,168,76,.15);
+}
+.field textarea { resize: vertical; }
+
+/* ── Header ─────────────────────────────── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15,23,42,.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.header__inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.logo { font-size: 22px; color: var(--gold); font-style: italic; letter-spacing: 2px; }
+.nav { display: flex; gap: 28px; font-size: 13px; letter-spacing: .5px; }
+.nav a { color: var(--text-2); transition: color var(--trans); }
+.nav a:hover, .nav--active { color: var(--gold) !important; }
+
+/* ── Hero ───────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0a0f1e 0%, #16213e 60%, #1a1a2e 100%);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 100px 24px 60px;
+}
+.hero__sub { font-size: 13px; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 16px; }
+.hero__title { font-size: clamp(48px,8vw,96px); color: var(--gold); font-style: italic; margin-bottom: 16px; }
+.hero__desc { font-size: 17px; color: var(--text-2); max-width: 480px; margin: 0 auto 36px; }
+
+/* ── Section ────────────────────────────── */
+.booking { padding: 80px 0 60px; }
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.section-title {
+  text-align: center; font-size: 28px; color: var(--gold);
+  letter-spacing: 3px; margin-bottom: 36px;
+}
+
+/* ── Параметры ──────────────────────────── */
+.booking__params {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+
+/* ── Схема зала ─────────────────────────── */
+.hall-wrap {
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 28px;
+}
+.hall-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.hall-header h3 { color: var(--gold); font-size: 15px; letter-spacing: 1px; }
+.legend { display: flex; gap: 16px; }
+.legend__item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-2);
+}
+.legend__item::before {
+  content: ''; width: 12px; height: 12px; border-radius: 50%;
+}
+.legend__item--free::before   { background: #22c55e; }
+.legend__item--busy::before   { background: #ef4444; }
+.legend__item--selected::before { background: #3b82f6; }
+
+.hall {
+  position: relative;
+  background: #0b1527;
+  border-radius: 6px;
+  height: 420px;
+  border: 1px solid rgba(201,168,76,.1);
+  overflow: hidden;
+}
+.hall__zone-label {
+  position: absolute;
+  font-size: 10px; color: rgba(201,168,76,.6);
+  letter-spacing: 1px; text-transform: uppercase;
+  background: rgba(201,168,76,.08);
+  padding: 3px 8px; border-radius: 3px;
+}
+.hall__zone-label--main    { left: 14px; top: 10px; }
+.hall__zone-label--terrace { right: 50px; top: 10px; }
+.hall__zone-label--vip     { left: 14px; bottom: 10px; }
+.hall__divider {
+  position: absolute;
+  background: rgba(201,168,76,.08);
+}
+.hall__divider--v { top: 5%; bottom: 5%; right: 17%; width: 1px; }
+.hall__divider--h { left: 3%; right: 3%; bottom: 28%; height: 1px; }
+
+.hall__loading {
+  text-align: center; color: var(--text-2); font-size: 14px;
+  padding: 20px 0; display: none;
+}
+
+/* ── Столы ──────────────────────────────── */
+.table-item {
+  position: absolute;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all var(--trans);
+  user-select: none;
+}
+.table-item .t-num { font-size: 13px; font-weight: bold; color: #fff; }
+.table-item .t-cap { font-size: 10px; color: rgba(255,255,255,.8); }
+
+.table-item--round  { border-radius: 50%; }
+.table-item--rect   { border-radius: 8px; }
+
+.table-item--free {
+  background: radial-gradient(circle, #22c55e, #15803d);
+  border: 2px solid #16a34a;
+  box-shadow: 0 0 8px rgba(34,197,94,.3);
+}
+.table-item--free:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(34,197,94,.5);
+}
+.table-item--busy {
+  background: radial-gradient(circle, #ef4444, #b91c1c);
+  border: 2px solid #dc2626;
+  cursor: not-allowed;
+  opacity: .8;
+}
+.table-item--selected {
+  background: radial-gradient(circle, #60a5fa, #2563eb);
+  border: 2px solid #1d4ed8;
+  box-shadow: 0 0 16px rgba(59,130,246,.5);
+  animation: pulse-blue .9s infinite alternate;
+}
+@keyframes pulse-blue {
+  from { box-shadow: 0 0 8px rgba(59,130,246,.4); }
+  to   { box-shadow: 0 0 20px rgba(59,130,246,.7); }
+}
+
+/* Tooltip */
+.table-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark-2);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 11px; color: var(--text);
+  white-space: nowrap; z-index: 50;
+  pointer-events: none;
+}
+.table-tooltip::after {
+  content: ''; position: absolute;
+  top: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--gold);
+}
+.table-item:not(.table-item--busy):hover .table-tooltip { display: block; }
+.table-tooltip { display: none; }
+
+/* ── Форма бронирования ─────────────────── */
+.booking-form {
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.booking-form__header { margin-bottom: 20px; }
+.booking-form__header h3 { color: var(--gold); font-size: 17px; margin-bottom: 8px; }
+.booking-form__info {
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 16px;
+  display: flex; gap: 24px; flex-wrap: wrap;
+  font-size: 13px; color: var(--text-2);
+}
+.booking-form__info span { color: var(--gold); font-weight: bold; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.field--full { grid-column: 1 / -1; }
+
+.booking-form__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ── Сообщения ──────────────────────────── */
+.form-msg {
+  margin-top: 14px;
+  padding: 11px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.form-msg--success { background: rgba(34,197,94,.15); border: 1px solid #22c55e; color: #4ade80; }
+.form-msg--error   { background: rgba(239,68,68,.15);  border: 1px solid #ef4444; color: #f87171; }
+
+/* ── Footer ─────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 28px;
+  color: var(--text-2);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+
+/* ════════════════════════════════════════════════
+   ADMIN STYLES
+   ════════════════════════════════════════════════ */
+
+.admin-body { font-family: Arial, sans-serif; }
+
+/* Login */
+.login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--dark);
+}
+.login-card {
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 44px;
+  width: 360px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.login-card__logo { color: var(--gold); font-size: 22px; font-style: italic; text-align: center; font-family: Georgia, serif; }
+.login-card__title { text-align: center; font-size: 16px; color: var(--text-2); font-weight: normal; }
+
+/* Admin panel */
+.admin-panel { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 200px; flex-shrink: 0;
+  background: var(--dark-2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 20px 0;
+}
+.sidebar__logo {
+  color: var(--gold); font-size: 18px; font-style: italic;
+  font-family: Georgia, serif;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.sidebar__nav { display: flex; flex-direction: column; flex: 1; }
+.sidebar__item {
+  padding: 11px 20px;
+  background: transparent; border: none; border-right: 2px solid transparent;
+  color: var(--text-2); cursor: pointer;
+  font-size: 13px; text-align: left;
+  transition: all var(--trans);
+}
+.sidebar__item:hover { color: var(--text); background: rgba(255,255,255,.04); }
+.sidebar__item--active { color: var(--gold); border-right-color: var(--gold); background: rgba(201,168,76,.08); }
+.sidebar__logout {
+  margin: 0 12px 12px;
+  padding: 9px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-2);
+  border-radius: 5px; cursor: pointer; font-size: 12px;
+  transition: all var(--trans);
+}
+.sidebar__logout:hover { border-color: #ef4444; color: #ef4444; }
+
+.admin-main { flex: 1; padding: 28px; overflow: auto; }
+
+.admin-view__title { font-size: 20px; color: var(--gold); margin-bottom: 24px; }
+.admin-view__header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+.stat-card {
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+}
+.stat-card--gold::before   { background: var(--gold); }
+.stat-card--blue::before   { background: #3b82f6; }
+.stat-card--orange::before { background: #f59e0b; }
+.stat-card--green::before  { background: #22c55e; }
+.stat-card--purple::before { background: #a855f7; }
+.stat-card__val {
+  font-size: 36px; font-weight: bold; margin: 6px 0 8px;
+}
+.stat-card--gold   .stat-card__val { color: var(--gold); }
+.stat-card--blue   .stat-card__val { color: #60a5fa; }
+.stat-card--orange .stat-card__val { color: #fbbf24; }
+.stat-card--green  .stat-card__val { color: #4ade80; }
+.stat-card--purple .stat-card__val { color: #c084fc; }
+.stat-card__label { font-size: 12px; color: var(--text-2); line-height: 1.3; }
+
+/* Filters */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.filter-input {
+  background: var(--dark-2); border: 1px solid var(--border);
+  color: var(--text); padding: 7px 10px; border-radius: 5px;
+  font-size: 13px; font-family: inherit;
+}
+.filter-input:focus { outline: none; border-color: var(--gold); }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+.res-table {
+  width: 100%; border-collapse: collapse; font-size: 12.5px;
+  min-width: 900px;
+}
+.res-table th {
+  background: #1e3a5f; color: #93c5fd;
+  padding: 10px 10px; text-align: left; font-weight: 600;
+  border-bottom: 1px solid #334155;
+  white-space: nowrap;
+}
+.res-table td {
+  padding: 9px 10px; border-bottom: 1px solid var(--dark-2);
+  vertical-align: middle;
+}
+.res-table tr:hover td { background: rgba(255,255,255,.03); }
+.table-empty { text-align: center; color: var(--text-2); padding: 30px !important; }
+
+/* Status badge */
+.badge {
+  display: inline-block;
+  padding: 3px 9px; border-radius: 10px;
+  font-size: 11px; font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Status select in table */
+.status-select {
+  background: var(--dark-2); border: 1px solid var(--border);
+  color: var(--text); padding: 4px 6px; border-radius: 4px;
+  font-size: 11px; cursor: pointer;
+}
+.status-select:focus { outline: none; border-color: var(--gold); }
+
+.btn-delete {
+  background: transparent; border: 1px solid #dc2626;
+  color: #dc2626; padding: 4px 10px; border-radius: 4px;
+  font-size: 11px; cursor: pointer; transition: all var(--trans);
+}
+.btn-delete:hover { background: rgba(220,38,38,.15); }
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .field--full { grid-column: 1; }
+  .booking-form__info { gap: 10px; }
+  .admin-panel { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; padding: 10px; }
+  .sidebar__nav { flex-direction: row; }
+}
