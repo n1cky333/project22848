@@ -5,4 +5,4 @@
  * Вставь сюда URL своего Railway-проекта (без слэша в конце).
  * Например: 'https://la-maison-production.up.railway.app'
  */
-const API_URL = 'https://ТВОЙ-ПРОЕКТ.up.railway.app';
+const API_URL = 'https://project-production-ca03.up.railway.app';
