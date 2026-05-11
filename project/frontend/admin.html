@@ -1,116 +1,489 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Maison — Панель администратора</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>La Maison — Администратор</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --gold:#c9a84c;--dark:#0d1117;--dark2:#161b22;--dark3:#1c2333;
+  --border:rgba(201,168,76,.22);--text:#e6edf3;--text2:#8b949e;--radius:10px;
+}
+body{background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,Arial,sans-serif;min-height:100vh}
+
+/* ── LOGIN ────────────────────────────────── */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lcard{
+  background:var(--dark2);border:1px solid var(--border);border-radius:14px;
+  padding:40px 36px;width:100%;max-width:360px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.llogo{color:var(--gold);font-size:24px;font-style:italic;text-align:center;font-family:Georgia,serif;letter-spacing:2px}
+.lsub{text-align:center;color:var(--text2);font-size:14px}
+.fld label{display:block;font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.fld input{
+  width:100%;background:var(--dark3);border:1px solid var(--border);
+  color:var(--text);padding:12px 14px;border-radius:7px;font-size:16px;
+  font-family:inherit;transition:.2s;-webkit-appearance:none;
+}
+.fld input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+.btn-login{
+  width:100%;padding:13px;border-radius:7px;border:none;
+  background:linear-gradient(135deg,var(--gold),#9a7228);
+  color:#0d1117;font-weight:700;font-size:15px;cursor:pointer;
+  font-family:inherit;transition:.2s;letter-spacing:.3px;
+}
+.btn-login:hover{filter:brightness(1.1)}
+.btn-login:active{filter:brightness(.95)}
+.lerr{
+  padding:11px 14px;border-radius:7px;font-size:13px;
+  background:rgba(220,38,38,.1);border:1px solid #dc2626;color:#f87171;
+  display:none;text-align:center;
+}
+
+/* ── PANEL ────────────────────────────────── */
+#panel{display:none;min-height:100vh;flex-direction:column}
+
+/* Top bar */
+.topbar{
+  background:var(--dark2);border-bottom:1px solid var(--border);
+  padding:0 16px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-logo{color:var(--gold);font-size:18px;font-style:italic;font-family:Georgia,serif}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn-logout{
+  background:transparent;border:1px solid var(--border);color:var(--text2);
+  padding:7px 14px;border-radius:6px;font-size:12px;cursor:pointer;
+  font-family:inherit;transition:.2s;
+}
+.btn-logout:hover{border-color:#dc2626;color:#dc2626}
+
+/* Bottom nav (mobile) */
+.botnav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--dark2);border-top:1px solid var(--border);
+  padding:8px 0 max(8px,env(safe-area-inset-bottom));
+  display:flex;
+}
+.botnav button{
+  flex:1;background:none;border:none;color:var(--text2);
+  font-size:11px;padding:6px 4px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-family:inherit;transition:.2s;
+}
+.botnav button span{font-size:20px}
+.botnav button.act{color:var(--gold)}
+
+/* Layout */
+.layout{display:flex;flex:1}
+
+/* Sidebar desktop */
+.sidebar{
+  width:188px;flex-shrink:0;
+  background:var(--dark2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:16px 0;
+}
+.sb-item{
+  padding:11px 20px;background:none;border:none;
+  border-right:2px solid transparent;
+  color:var(--text2);cursor:pointer;font-size:13px;
+  text-align:left;transition:.2s;font-family:inherit;
+}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.act{color:var(--gold);border-right-color:var(--gold);background:rgba(201,168,76,.06)}
+
+/* Main content */
+.main{flex:1;padding:24px 16px;overflow:auto;padding-bottom:80px}
+@media(min-width:641px){.main{padding-bottom:24px}}
+
+.view{display:none}
+.view.act{display:block}
+.vtitle{font-size:20px;color:var(--gold);margin-bottom:20px;font-family:Georgia,serif}
+
+/* Stats grid */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.sc{
+  background:var(--dark2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 12px;text-align:center;position:relative;overflow:hidden;
+}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc:nth-child(1)::before{background:var(--gold)}
+.sc:nth-child(2)::before{background:#3b82f6}
+.sc:nth-child(3)::before{background:#f59e0b}
+.sc:nth-child(4)::before{background:#22c55e}
+.sc:nth-child(5)::before{background:#a855f7}
+.sc-v{font-size:32px;font-weight:700;margin:4px 0 6px;line-height:1}
+.sc:nth-child(1) .sc-v{color:var(--gold)}
+.sc:nth-child(2) .sc-v{color:#60a5fa}
+.sc:nth-child(3) .sc-v{color:#fbbf24}
+.sc:nth-child(4) .sc-v{color:#4ade80}
+.sc:nth-child(5) .sc-v{color:#c084fc}
+.sc-l{font-size:11px;color:var(--text2);line-height:1.4}
+
+/* Filters */
+.vhead{margin-bottom:16px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.filters input,.filters select{
+  background:var(--dark2);border:1px solid var(--border);color:var(--text);
+  padding:9px 11px;border-radius:6px;font-size:14px;font-family:inherit;
+  -webkit-appearance:none;
+}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--gold)}
+.btn-sm{
+  padding:9px 16px;border-radius:6px;border:1px solid var(--border);
+  background:transparent;color:var(--text2);font-size:13px;cursor:pointer;
+  font-family:inherit;transition:.2s;
+}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Reservations table */
+.twrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
+th{
+  background:#0d1e35;color:#93c5fd;padding:11px 10px;
+  text-align:left;font-weight:600;border-bottom:1px solid #1e3a5f;
+  white-space:nowrap;
+}
+td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+tr:hover td{background:rgba(255,255,255,.02)}
+.empty-td{text-align:center;color:var(--text2);padding:36px!important}
+.badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.ssel{
+  background:var(--dark2);border:1px solid var(--border);color:var(--text);
+  padding:5px 8px;border-radius:5px;font-size:12px;cursor:pointer;
+  font-family:inherit;-webkit-appearance:none;
+}
+.ssel:focus{outline:none;border-color:var(--gold)}
+.btn-del{
+  background:transparent;border:1px solid #dc2626;color:#dc2626;
+  padding:5px 10px;border-radius:4px;font-size:11px;cursor:pointer;
+  font-family:inherit;transition:.2s;margin-left:6px;
+}
+.btn-del:hover{background:rgba(220,38,38,.12)}
+
+/* Mobile cards view */
+.res-cards{display:none}
+@media(max-width:640px){
+  .twrap{display:none}
+  .res-cards{display:flex;flex-direction:column;gap:10px}
+}
+.res-card{
+  background:var(--dark2);border:1px solid var(--border);border-radius:8px;padding:14px;
+}
+.rc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px}
+.rc-name{font-weight:600;font-size:15px}
+.rc-row{font-size:13px;color:var(--text2);margin-bottom:4px}
+.rc-row b{color:var(--text)}
+.rc-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.rc-ssel{
+  flex:1;background:var(--dark3);border:1px solid var(--border);color:var(--text);
+  padding:8px;border-radius:6px;font-size:13px;font-family:inherit;
+}
+.rc-del{
+  background:transparent;border:1px solid #dc2626;color:#dc2626;
+  padding:8px 14px;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;
+}
+
+/* Responsive sidebar */
+@media(max-width:640px){
+  .sidebar{display:none}
+  .botnav{display:flex}
+  .main{padding-top:16px}
+}
+</style>
 </head>
-<body class="admin-body">
+<body>
 
 <!-- ═══ LOGIN ═══ -->
-<div id="login-screen" class="login-screen">
-  <div class="login-card">
-    <div class="login-card__logo">✦ La Maison</div>
-    <h2 class="login-card__title">Вход для персонала</h2>
-    <div class="field">
-      <label for="l-login">Логин</label>
-      <input type="text" id="l-login" value="admin" autocomplete="username" />
+<div id="login">
+  <div class="lcard">
+    <div class="llogo">✦ La Maison</div>
+    <div class="lsub">Вход для сотрудников</div>
+    <div class="fld">
+      <label>Логин</label>
+      <input type="text" id="l-login" value="admin" autocomplete="username"/>
     </div>
-    <div class="field">
-      <label for="l-pass">Пароль</label>
-      <input type="password" id="l-pass" autocomplete="current-password" />
+    <div class="fld">
+      <label>Пароль</label>
+      <input type="password" id="l-pass" autocomplete="current-password"/>
     </div>
-    <button class="btn btn--gold btn--full" id="btn-login">Войти</button>
-    <div id="login-err" class="form-msg form-msg--error" style="display:none;"></div>
+    <button class="btn-login" id="btn-login">Войти</button>
+    <div class="lerr" id="l-err"></div>
   </div>
 </div>
 
-<!-- ═══ ADMIN PANEL ═══ -->
-<div id="admin-panel" class="admin-panel" style="display:none;">
+<!-- ═══ PANEL ═══ -->
+<div id="panel">
+  <div class="topbar">
+    <div class="topbar-logo">✦ La Maison</div>
+    <div class="topbar-right">
+      <button class="btn-logout" id="btn-logout">Выйти</button>
+    </div>
+  </div>
 
-  <aside class="sidebar">
-    <div class="sidebar__logo">✦ La Maison</div>
-    <nav class="sidebar__nav">
-      <button class="sidebar__item sidebar__item--active" data-view="dashboard">📊 Дашборд</button>
-      <button class="sidebar__item" data-view="reservations">📋 Бронирования</button>
-    </nav>
-    <button class="sidebar__logout" id="btn-logout">Выйти</button>
-  </aside>
+  <div class="layout">
+    <!-- Desktop sidebar -->
+    <aside class="sidebar">
+      <button class="sb-item act" data-v="dash">📊 Дашборд</button>
+      <button class="sb-item" data-v="res">📋 Бронирования</button>
+    </aside>
 
-  <main class="admin-main">
-
-    <!-- DASHBOARD -->
-    <section id="view-dashboard" class="admin-view">
-      <h2 class="admin-view__title">Дашборд</h2>
-      <div class="stats-grid">
-        <div class="stat-card stat-card--gold">
-          <div class="stat-card__val" id="stat-total">—</div>
-          <div class="stat-card__label">Активных бронирований</div>
-        </div>
-        <div class="stat-card stat-card--blue">
-          <div class="stat-card__val" id="stat-today">—</div>
-          <div class="stat-card__label">Бронирований сегодня</div>
-        </div>
-        <div class="stat-card stat-card--orange">
-          <div class="stat-card__val" id="stat-pending">—</div>
-          <div class="stat-card__label">Ожидают подтверждения</div>
-        </div>
-        <div class="stat-card stat-card--green">
-          <div class="stat-card__val" id="stat-customers">—</div>
-          <div class="stat-card__label">Уникальных клиентов</div>
-        </div>
-        <div class="stat-card stat-card--purple">
-          <div class="stat-card__val" id="stat-zones">—</div>
-          <div class="stat-card__label">Зон зала</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESERVATIONS -->
-    <section id="view-reservations" class="admin-view" style="display:none;">
-      <div class="admin-view__header">
-        <h2 class="admin-view__title">Бронирования</h2>
-        <div class="filters">
-          <input type="date" id="f-date" class="filter-input" />
-          <select id="f-status" class="filter-input">
-            <option value="">Все статусы</option>
-            <option value="pending">Ожидает</option>
-            <option value="confirmed">Подтверждено</option>
-            <option value="completed">Завершено</option>
-            <option value="cancelled">Отменено</option>
-          </select>
-          <button class="btn btn--outline btn--sm" id="btn-filter">Применить</button>
-          <button class="btn btn--ghost btn--sm" id="btn-reset-filter">Сбросить</button>
+    <main class="main">
+      <!-- DASHBOARD -->
+      <div class="view act" id="v-dash">
+        <div class="vtitle">Дашборд</div>
+        <div class="stats">
+          <div class="sc"><div class="sc-v" id="s-total">—</div><div class="sc-l">Активных броней</div></div>
+          <div class="sc"><div class="sc-v" id="s-today">—</div><div class="sc-l">Сегодня</div></div>
+          <div class="sc"><div class="sc-v" id="s-pend">—</div><div class="sc-l">Ожидают</div></div>
+          <div class="sc"><div class="sc-v" id="s-cust">—</div><div class="sc-l">Клиентов</div></div>
+          <div class="sc"><div class="sc-v" id="s-zones">—</div><div class="sc-l">Зон зала</div></div>
         </div>
       </div>
 
-      <div class="table-wrap">
-        <table class="res-table" id="res-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Дата и время</th>
-              <th>Клиент</th>
-              <th>Телефон</th>
-              <th>Стол / зона</th>
-              <th>Гостей</th>
-              <th>Пожелания</th>
-              <th>Статус</th>
-              <th>Действия</th>
-            </tr>
-          </thead>
-          <tbody id="res-tbody">
-            <tr><td colspan="9" class="table-empty">Загрузка…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <!-- RESERVATIONS -->
+      <div class="view" id="v-res">
+        <div class="vhead">
+          <div class="vtitle" style="margin:0">Бронирования</div>
+          <div class="filters">
+            <input type="date" id="f-date"/>
+            <select id="f-status">
+              <option value="">Все статусы</option>
+              <option value="pending">Ожидает</option>
+              <option value="confirmed">Подтверждено</option>
+              <option value="completed">Завершено</option>
+              <option value="cancelled">Отменено</option>
+            </select>
+            <button class="btn-sm" onclick="loadRes()">Применить</button>
+            <button class="btn-sm" onclick="resetF()">Сбросить</button>
+          </div>
+        </div>
 
-  </main>
+        <!-- Desktop table -->
+        <div class="twrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Дата / Время</th><th>Клиент</th><th>Телефон</th>
+                <th>Стол</th><th>Гостей</th><th>Пожелания</th><th>Статус</th><th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr><td colspan="9" class="empty-td">Загрузка…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile cards -->
+        <div class="res-cards" id="res-cards">
+          <div style="text-align:center;color:var(--text2);padding:20px">Загрузка…</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="botnav">
+    <button data-v="dash" class="act"><span>📊</span>Дашборд</button>
+    <button data-v="res"><span>📋</span>Брони</button>
+  </nav>
 </div>
 
 <script src="config.js"></script>
-<script src="admin.js"></script>
+<script>
+if(typeof API_URL==='undefined') var API_URL='';
+
+function req(path,opts){
+  return fetch(API_URL+path,Object.assign({
+    credentials:'include',
+    headers:{'Content-Type':'application/json'}
+  },opts||{})).then(function(r){return r.json();});
+}
+
+/* ── Session check ── */
+req('/api/admin/check').then(function(d){
+  if(d.success) showPanel();
+}).catch(function(){});
+
+/* ── Login ── */
+document.getElementById('l-pass').addEventListener('keydown',function(e){
+  if(e.key==='Enter') document.getElementById('btn-login').click();
+});
+
+document.getElementById('btn-login').addEventListener('click',function(){
+  var btn=this, err=document.getElementById('l-err');
+  err.style.display='none';
+  btn.disabled=true; btn.textContent='Вход…';
+  req('/api/admin/login',{method:'POST',body:JSON.stringify({
+    login:document.getElementById('l-login').value.trim(),
+    password:document.getElementById('l-pass').value
+  })}).then(function(d){
+    btn.disabled=false; btn.textContent='Войти';
+    if(d.success) showPanel();
+    else{err.textContent=d.message||'Неверный логин или пароль';err.style.display='block';}
+  }).catch(function(){
+    btn.disabled=false; btn.textContent='Войти';
+    err.textContent='Сетевая ошибка'; err.style.display='block';
+  });
+});
+
+/* ── Logout ── */
+document.getElementById('btn-logout').addEventListener('click',function(){
+  req('/api/admin/logout',{method:'POST'}).then(function(){
+    document.getElementById('panel').style.display='none';
+    document.getElementById('login').style.display='flex';
+  });
+});
+
+/* ── Navigation ── */
+function switchView(v){
+  /* sidebar */
+  document.querySelectorAll('.sb-item').forEach(function(b){
+    b.classList.toggle('act',b.dataset.v===v);
+  });
+  /* botnav */
+  document.querySelectorAll('.botnav button').forEach(function(b){
+    b.classList.toggle('act',b.dataset.v===v);
+  });
+  /* views */
+  document.querySelectorAll('.view').forEach(function(el){el.classList.remove('act');});
+  var vEl=document.getElementById('v-'+v);
+  if(vEl) vEl.classList.add('act');
+  if(v==='dash') loadStats();
+  if(v==='res') loadRes();
+}
+
+document.querySelectorAll('.sb-item,.botnav button').forEach(function(btn){
+  btn.addEventListener('click',function(){switchView(btn.dataset.v);});
+});
+
+function showPanel(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('panel').style.display='flex';
+  document.getElementById('panel').style.flexDirection='column';
+  loadStats();
+}
+
+/* ── Stats ── */
+function loadStats(){
+  req('/api/admin/stats').then(function(d){
+    if(!d.success) return;
+    var s=d.stats;
+    document.getElementById('s-total').textContent=s.total;
+    document.getElementById('s-today').textContent=s.today;
+    document.getElementById('s-pend').textContent=s.pending;
+    document.getElementById('s-cust').textContent=s.customers;
+    document.getElementById('s-zones').textContent=s.zones;
+  });
+}
+
+/* ── Reservations ── */
+function loadRes(){
+  var date=document.getElementById('f-date').value;
+  var status=document.getElementById('f-status').value;
+  var q=''; if(date) q+='date='+date+'&'; if(status) q+='status='+status+'&';
+  if(q) q='?'+q.slice(0,-1);
+
+  document.getElementById('tbody').innerHTML='<tr><td colspan="9" class="empty-td">Загрузка…</td></tr>';
+  document.getElementById('res-cards').innerHTML='<div style="text-align:center;color:var(--text2);padding:20px">Загрузка…</div>';
+
+  req('/api/admin/reservations'+q).then(function(d){
+    if(!d.success||!d.reservations.length){
+      document.getElementById('tbody').innerHTML='<tr><td colspan="9" class="empty-td">Бронирований не найдено</td></tr>';
+      document.getElementById('res-cards').innerHTML='<div style="text-align:center;color:var(--text2);padding:20px">Бронирований не найдено</div>';
+      return;
+    }
+    var rows=d.reservations;
+    /* Desktop table */
+    document.getElementById('tbody').innerHTML=rows.map(function(r){
+      var dt=formatDate(r.reservation_date);
+      var tm=r.reservation_time?r.reservation_time.slice(0,5):'';
+      var bc=r.badge_color||'#fff';
+      var bs='background:'+rgba(bc,.15)+';color:'+bc+';border:1px solid '+rgba(bc,.35);
+      return '<tr>'+
+        '<td>'+r.reservation_id+'</td>'+
+        '<td>'+dt+'<br><small style="color:var(--text2)">'+tm+'</small></td>'+
+        '<td>'+esc(r.full_name)+'</td>'+
+        '<td>'+esc(r.phone)+'</td>'+
+        '<td>№'+r.table_number+' · '+esc(r.zone_name)+'</td>'+
+        '<td>'+r.guests_count+'</td>'+
+        '<td style="max-width:140px;word-break:break-word">'+(r.special_requests?esc(r.special_requests):'—')+'</td>'+
+        '<td><span class="badge" style="'+bs+'">'+esc(r.status_name)+'</span></td>'+
+        '<td style="white-space:nowrap">'+
+          '<select class="ssel" onchange="chStatus(this,'+r.reservation_id+')">'+statusOpts(r.status_code)+'</select>'+
+          '<button class="btn-del" onclick="delRes('+r.reservation_id+',this)">✕</button>'+
+        '</td>'+
+      '</tr>';
+    }).join('');
+
+    /* Mobile cards */
+    document.getElementById('res-cards').innerHTML=rows.map(function(r){
+      var dt=formatDate(r.reservation_date);
+      var tm=r.reservation_time?r.reservation_time.slice(0,5):'';
+      var bc=r.badge_color||'#fff';
+      var bs='background:'+rgba(bc,.15)+';color:'+bc+';border:1px solid '+rgba(bc,.35);
+      return '<div class="res-card">'+
+        '<div class="rc-head">'+
+          '<div class="rc-name">'+esc(r.full_name)+'</div>'+
+          '<span class="badge" style="'+bs+'">'+esc(r.status_name)+'</span>'+
+        '</div>'+
+        '<div class="rc-row">📅 <b>'+dt+' '+tm+'</b></div>'+
+        '<div class="rc-row">🪑 Стол №'+r.table_number+' · '+esc(r.zone_name)+' · '+r.guests_count+' гостей</div>'+
+        '<div class="rc-row">📞 '+esc(r.phone)+'</div>'+
+        (r.special_requests?'<div class="rc-row">💬 '+esc(r.special_requests)+'</div>':'')+
+        '<div class="rc-actions">'+
+          '<select class="rc-ssel" onchange="chStatus(this,'+r.reservation_id+')">'+statusOpts(r.status_code)+'</select>'+
+          '<button class="rc-del" onclick="delRes('+r.reservation_id+',this)">Удалить</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  });
+}
+
+function statusOpts(cur){
+  return [['pending','Ожидает'],['confirmed','Подтверждено'],['completed','Завершено'],['cancelled','Отменено']]
+    .map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur?' selected':'')+'>'+o[1]+'</option>';})
+    .join('');
+}
+
+function chStatus(sel,id){
+  req('/api/admin/reservations/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:sel.value})})
+  .then(function(d){if(!d.success){alert('Ошибка обновления статуса');loadRes();}});
+}
+
+function delRes(id,btn){
+  if(!confirm('Удалить бронирование №'+id+'?')) return;
+  btn.disabled=true;
+  req('/api/admin/reservations/'+id,{method:'DELETE'}).then(function(d){
+    if(d.success){loadRes();loadStats();}
+    else{alert('Ошибка удаления');btn.disabled=false;}
+  });
+}
+
+function resetF(){
+  document.getElementById('f-date').value='';
+  document.getElementById('f-status').value='';
+  loadRes();
+}
+
+/* ── Helpers ── */
+function formatDate(s){
+  if(!s) return '—';
+  var d=(s+'').split('T')[0].split('-');
+  return d.length===3?d[2]+'.'+d[1]+'.'+d[0]:s;
+}
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function rgba(hex,a){
+  if(!hex||hex.length<7) return 'rgba(255,255,255,'+a+')';
+  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
+</script>
 </body>
 </html>
