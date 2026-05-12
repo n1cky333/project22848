@@ -217,8 +217,7 @@ function req(path, opts = {}) {
     const token = getToken();
     
     if (token) {
-        headers['Authorization'] = `Bearer ${token}`;   // ← изменили
-        // headers['X-Admin-Token'] = token;            // можно закомментировать
+        headers['X-Admin-Token'] = token;   
     }
 
     return fetch(API_URL + path, {
