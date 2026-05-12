@@ -35,13 +35,15 @@ async function initDB() {
 }
 
 // ── CORS ──────────────────────────────────────
-const origin = (process.env.FRONTEND_URL || '').replace(/\/+$/, '') || 'http://localhost:5500';
 app.use(cors({
-  origin(o, cb) { if (!o || o === origin) cb(null, true); else cb(new Error('CORS blocked')); },
+  origin: true,                    // ← разрешаем все origins временно
   credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Token']
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// Важно: OPTIONS preflight
+app.options('*', cors());
 
 // ── Auth middleware (поддержка двух способов) ───────────────────────────
 function auth(req, res, next) {
