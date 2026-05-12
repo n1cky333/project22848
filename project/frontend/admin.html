@@ -212,26 +212,19 @@ function setToken(t){ sessionStorage.setItem(TOKEN_KEY,t); }
 function clearToken(){ sessionStorage.removeItem(TOKEN_KEY); }
 
 /* ── API helper — всегда шлёт токен в заголовке ── */
-function req(path,opts){
-  var headers=Object.assign({'Content-Type':'application/json'},
-    (opts&&opts.headers)||{});
-  var t=getToken();
-  if(t) headers['X-Admin-Token']=t;
-  else {
-    // Если токена нет, а запрос не к логину, можно сразу редиректить или возвращать ошибку
-    // Но лучше просто отправить запрос, бэкенд сам вернет 401
-  }
-  return fetch(API_URL+path,Object.assign({},opts||{},{headers:headers}))
-    .then(function(r){
-      if (!r.ok && path !== '/api/admin/login') {
-         // Если ошибка авторизации, очищаем токен и показываем логин
-         if (r.status === 401) {
-            clearToken();
-            showLogin();
-         }
-      }
-      return r.json();
-    });
+function req(path, opts = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+    const token = getToken();
+    
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;   // ← изменили
+        // headers['X-Admin-Token'] = token;            // можно закомментировать
+    }
+
+    return fetch(API_URL + path, {
+        ...opts,
+        headers
+    }).then(r => r.json());
 }
 
 /* ── Session check on load ── */
