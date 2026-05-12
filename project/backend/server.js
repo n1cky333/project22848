@@ -13,6 +13,21 @@ const cors    = require('cors');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+// ── Logging Middleware (самый первый!) ───────────────────────────
+app.use((req, res, next) => {
+  console.log(`→ ${req.method} ${req.url}`);
+  console.log('Headers:', {
+    authorization: req.headers.authorization || null,
+    'x-admin-token': req.headers['x-admin-token'] || null
+  });
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log('Body:', req.body);
+  }
+  next();
+});
+
+
+
 // Токены в памяти: token -> { adminId, login, expiresAt }
 const tokens = new Map();
 const TOKEN_TTL = 24 * 60 * 60 * 1000;
@@ -35,19 +50,10 @@ async function initDB() {
 }
 
 // ── CORS + Logging ──────────────────────────────────────
-app.use((req, res, next) => {
-  console.log(`→ ${req.method} ${req.url}`);
-  if (req.method === 'POST' || req.method === 'PATCH') {
-    console.log('Body:', req.body);
-  }
-  console.log('Auth Header:', req.headers.authorization || req.headers['x-admin-token'] || 'NO TOKEN');
-  next();
-});
-
 app.use(cors({
   origin: true,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Token']
 }));
 
@@ -55,7 +61,8 @@ app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Admin-Token');
-  res.sendStatus(200);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(204);
 });
 
 app.use(express.json());
@@ -63,36 +70,31 @@ app.use(express.urlencoded({ extended: true }));
 
 // ── Auth middleware (поддержка двух способов) ───────────────────────────
 function auth(req, res, next) {
-    let token = req.headers['x-admin-token'];
+  let token = req.headers['x-admin-token'];
 
-    // Поддержка стандартного Authorization: Bearer token (как у тебя во фронте)
-    if (!token) {
-        const authHeader = req.headers['authorization'];
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            token = authHeader.substring(7).trim();
-        }
-    }
+  if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+    token = req.headers.authorization.substring(7).trim();
+  }
 
-    if (!token) {
-        console.log('❌ No token provided');
-        return res.status(401).json({ success: false, message: 'Требуется авторизация' });
-    }
+  if (!token) {
+    console.log('❌ No token in request');
+    return res.status(401).json({ success: false, message: 'Требуется авторизация' });
+  }
 
-    const session = tokens.get(token);
-    if (!session) {
-        console.log('❌ Token not found in memory:', token.substring(0, 15) + '...');
-        return res.status(401).json({ success: false, message: 'Токен недействителен' });
-    }
+  const session = tokens.get(token);
+  if (!session) {
+    console.log('❌ Token not found');
+    return res.status(401).json({ success: false, message: 'Токен недействителен' });
+  }
 
-    if (Date.now() > session.expiresAt) {
-        tokens.delete(token);
-        console.log('❌ Token expired');
-        return res.status(401).json({ success: false, message: 'Сессия истекла' });
-    }
+  if (Date.now() > session.expiresAt) {
+    tokens.delete(token);
+    return res.status(401).json({ success: false, message: 'Сессия истекла' });
+  }
 
-    req.adminId = session.adminId;
-    req.adminLogin = session.login;
-    next();
+  req.adminId = session.adminId;
+  req.adminLogin = session.login;
+  next();
 }
 
 // ── seedAdmin ─────────────────────────────────
