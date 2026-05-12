@@ -45,12 +45,31 @@ app.use(express.urlencoded({ extended: true }));
 
 // ── Auth middleware ───────────────────────────
 function auth(req, res, next) {
-  const t = req.headers['x-admin-token'];
-  if (!t) return res.status(401).json({ success: false, message: 'Требуется авторизация' });
-  const s = tokens.get(t);
-  if (!s) return res.status(401).json({ success: false, message: 'Токен недействителен' });
-  if (Date.now() > s.expiresAt) { tokens.delete(t); return res.status(401).json({ success: false, message: 'Сессия истекла' }); }
-  req.adminId = s.adminId; req.adminLogin = s.login; next();
+    let t = req.headers['x-admin-token'];
+
+    // Поддержка Authorization: Bearer token (как в твоём admin.html)
+    if (!t) {
+        const authHeader = req.headers['authorization'];
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            t = authHeader.substring(7); // убираем "Bearer "
+        }
+    }
+
+    if (!t) 
+        return res.status(401).json({ success: false, message: 'Требуется авторизация' });
+
+    const s = tokens.get(t);
+    if (!s) 
+        return res.status(401).json({ success: false, message: 'Токен недействителен' });
+
+    if (Date.now() > s.expiresAt) {
+        tokens.delete(t);
+        return res.status(401).json({ success: false, message: 'Сессия истекла' });
+    }
+
+    req.adminId = s.adminId;
+    req.adminLogin = s.login;
+    next();
 }
 
 // ── seedAdmin ─────────────────────────────────
