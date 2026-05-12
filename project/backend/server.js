@@ -34,16 +34,32 @@ async function initDB() {
   console.log('✅  MySQL подключён:', dbCfg.host);
 }
 
-// ── CORS ──────────────────────────────────────
+// ── CORS + Logging ──────────────────────────────────────
+app.use((req, res, next) => {
+  console.log(`→ ${req.method} ${req.url}`);
+  if (req.method === 'POST' || req.method === 'PATCH') {
+    console.log('Body:', req.body);
+  }
+  console.log('Auth Header:', req.headers.authorization || req.headers['x-admin-token'] || 'NO TOKEN');
+  next();
+});
+
 app.use(cors({
-  origin: true,                    // ← разрешаем все origins временно
+  origin: true,
   credentials: true,
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Admin-Token']
 }));
 
-// Важно: OPTIONS preflight
-app.options('*', cors());
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Admin-Token');
+  res.sendStatus(200);
+});
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ── Auth middleware (поддержка двух способов) ───────────────────────────
 function auth(req, res, next) {
@@ -162,13 +178,25 @@ app.post('/api/reservations', async (req, res) => {
 // ═══════════════════════════════════════════════
 app.post('/api/admin/login', async (req, res) => {
   try {
+    console.log('=== LOGIN ATTEMPT ===');
     const { login, password } = req.body || {};
-    if (!login || !password) 
+    console.log('Login:', login);
+
+    if (!login || !password) {
       return res.status(400).json({ success: false, message: 'Введите логин и пароль' });
+    }
 
     const [rows] = await db.query('SELECT * FROM admins WHERE login=?', [login]);
-    if (!rows.length || !await bcrypt.compare(password, rows[0].password)) {
-      console.log('❌ Неверный логин/пароль:', login);
+    
+    if (!rows.length) {
+      console.log('❌ User not found');
+      return res.status(401).json({ success: false, message: 'Неверный логин или пароль' });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, rows[0].password);
+    console.log('Password match:', passwordMatch);
+
+    if (!passwordMatch) {
       return res.status(401).json({ success: false, message: 'Неверный логин или пароль' });
     }
 
@@ -179,7 +207,7 @@ app.post('/api/admin/login', async (req, res) => {
       expiresAt: Date.now() + TOKEN_TTL 
     });
 
-    console.log(`✅ Успешный вход: ${login} | Token: ${token.substring(0, 20)}...`);
+    console.log(`✅ SUCCESSFUL LOGIN! Token created: ${token.substring(0,20)}...`);
 
     res.json({ 
       success: true, 
@@ -187,7 +215,7 @@ app.post('/api/admin/login', async (req, res) => {
       login: rows[0].login 
     });
   } catch (e) {
-    console.error(e);
+    console.error('Login error:', e);
     res.status(500).json({ success: false, message: 'Ошибка сервера' });
   }
 });
