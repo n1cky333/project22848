@@ -4,10 +4,23 @@
 
 if (typeof API_URL === 'undefined') { var API_URL = ''; }
 
+// Получаем токен из localStorage
+function getToken() {
+  return localStorage.getItem('admin_token');
+}
+
 function api(path, opts = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+
+  // Если есть токен, добавляем его в заголовок
+  if (token) {
+    headers['X-Admin-Token'] = token;
+  }
+
   return fetch(API_URL + path, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...opts.headers },
+    // credentials: 'include' больше не нужен для авторизации, так как используем токен
+    headers: headers,
     ...opts,
   }).then(r => r.json());
 }
@@ -18,6 +31,10 @@ function api(path, opts = {}) {
 async function checkSession() {
   const res = await api('/api/admin/check').catch(() => null);
   if (res && res.success) {
+    // Сохраняем токен, если он есть в ответе (при логине)
+    if (res.token) {
+      localStorage.setItem('admin_token', res.token);
+    }
     showPanel();
     loadStats();
   } else {
@@ -57,6 +74,10 @@ document.getElementById('btn-login')?.addEventListener('click', async () => {
   btn.disabled = false; btn.textContent = 'Войти';
 
   if (res && res.success) {
+    // Сохраняем токен, если он есть в ответе (при логине)
+    if (res.token) {
+      localStorage.setItem('admin_token', res.token);
+    }
     showPanel();
     loadStats();
   } else {
