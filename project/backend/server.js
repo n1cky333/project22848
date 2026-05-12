@@ -43,32 +43,37 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Auth middleware ───────────────────────────
+// ── Auth middleware (поддержка двух способов) ───────────────────────────
 function auth(req, res, next) {
-    let t = req.headers['x-admin-token'];
+    let token = req.headers['x-admin-token'];
 
-    // Поддержка Authorization: Bearer token (как в твоём admin.html)
-    if (!t) {
+    // Поддержка стандартного Authorization: Bearer token (как у тебя во фронте)
+    if (!token) {
         const authHeader = req.headers['authorization'];
         if (authHeader && authHeader.startsWith('Bearer ')) {
-            t = authHeader.substring(7); // убираем "Bearer "
+            token = authHeader.substring(7).trim();
         }
     }
 
-    if (!t) 
+    if (!token) {
+        console.log('❌ No token provided');
         return res.status(401).json({ success: false, message: 'Требуется авторизация' });
+    }
 
-    const s = tokens.get(t);
-    if (!s) 
+    const session = tokens.get(token);
+    if (!session) {
+        console.log('❌ Token not found in memory:', token.substring(0, 15) + '...');
         return res.status(401).json({ success: false, message: 'Токен недействителен' });
+    }
 
-    if (Date.now() > s.expiresAt) {
-        tokens.delete(t);
+    if (Date.now() > session.expiresAt) {
+        tokens.delete(token);
+        console.log('❌ Token expired');
         return res.status(401).json({ success: false, message: 'Сессия истекла' });
     }
 
-    req.adminId = s.adminId;
-    req.adminLogin = s.login;
+    req.adminId = session.adminId;
+    req.adminLogin = session.login;
     next();
 }
 
@@ -156,14 +161,33 @@ app.post('/api/reservations', async (req, res) => {
 app.post('/api/admin/login', async (req, res) => {
   try {
     const { login, password } = req.body || {};
-    if (!login || !password) return res.status(400).json({ success: false, message: 'Введите логин и пароль' });
+    if (!login || !password) 
+      return res.status(400).json({ success: false, message: 'Введите логин и пароль' });
+
     const [rows] = await db.query('SELECT * FROM admins WHERE login=?', [login]);
-    if (!rows.length || !await bcrypt.compare(password, rows[0].password))
+    if (!rows.length || !await bcrypt.compare(password, rows[0].password)) {
+      console.log('❌ Неверный логин/пароль:', login);
       return res.status(401).json({ success: false, message: 'Неверный логин или пароль' });
+    }
+
     const token = crypto.randomBytes(32).toString('hex');
-    tokens.set(token, { adminId: rows[0].admin_id, login: rows[0].login, expiresAt: Date.now() + TOKEN_TTL });
-    res.json({ success: true, token, login: rows[0].login });
-  } catch (e) { console.error(e); res.status(500).json({ success: false, message: 'Ошибка сервера' }); }
+    tokens.set(token, { 
+      adminId: rows[0].admin_id, 
+      login: rows[0].login, 
+      expiresAt: Date.now() + TOKEN_TTL 
+    });
+
+    console.log(`✅ Успешный вход: ${login} | Token: ${token.substring(0, 20)}...`);
+
+    res.json({ 
+      success: true, 
+      token: token,
+      login: rows[0].login 
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
+  }
 });
 
 app.post('/api/admin/logout', auth, (req, res) => {
