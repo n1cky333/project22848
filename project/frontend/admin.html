@@ -215,9 +215,23 @@ function clearToken(){ sessionStorage.removeItem(TOKEN_KEY); }
 function req(path,opts){
   var headers=Object.assign({'Content-Type':'application/json'},
     (opts&&opts.headers)||{});
-  var t=getToken(); if(t) headers['X-Admin-Token']=t;
+  var t=getToken();
+  if(t) headers['X-Admin-Token']=t;
+  else {
+    // Если токена нет, а запрос не к логину, можно сразу редиректить или возвращать ошибку
+    // Но лучше просто отправить запрос, бэкенд сам вернет 401
+  }
   return fetch(API_URL+path,Object.assign({},opts||{},{headers:headers}))
-    .then(function(r){return r.json();});
+    .then(function(r){
+      if (!r.ok && path !== '/api/admin/login') {
+         // Если ошибка авторизации, очищаем токен и показываем логин
+         if (r.status === 401) {
+            clearToken();
+            showLogin();
+         }
+      }
+      return r.json();
+    });
 }
 
 /* ── Session check on load ── */
