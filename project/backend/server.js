@@ -12,6 +12,7 @@ const cors    = require('cors');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const origin = (process.env.FRONTEND_URL || '').replace(/\/+$/, '') || '*';
 
 // ── Logging Middleware (самый первый!) ───────────────────────────
 app.use((req, res, next) => {
@@ -287,6 +288,9 @@ initDB().then(async () => {
   await seedAdmin();
   app.listen(PORT, () => {
     console.log(`🍽️  Сервер запущен на порту ${PORT}`);
-    console.log(`🌐  FRONTEND_URL: ${origin}`);
+    console.log(`🌐 FRONTEND_URL: ${origin}`);
   });
-}).catch(e => { console.error('❌  БД:', e.message); process.exit(1); });
+}).catch(e => { 
+  console.error('❌ БД:', e.message); 
+  process.exit(1); 
+});
