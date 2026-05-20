@@ -3,712 +3,1088 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>La Maison — Бронирование столов</title>
+<title>La Maison — Ресторан</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --gold:#c9a84c;--dark:#0d1117;--d2:#161b22;--d3:#1c2333;
-  --border:rgba(201,168,76,.2);--text:#e6edf3;--text2:#8b949e;
-  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+  --gold:#c9a84c;--gold2:#e8c96a;--dark:#0a0d12;--dark2:#111620;
+  --dark3:#181f2e;--dark4:#1e2738;--border:rgba(201,168,76,.18);
+  --text:#e8edf5;--text2:#8892a4;--text3:#6b7585;
+  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--teal:#14b8a6;
 }
 html{scroll-behavior:smooth}
-body{background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+body{background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
 
 /* ── HEADER ── */
-header{position:sticky;top:0;z-index:200;
-  background:rgba(13,17,23,.97);backdrop-filter:blur(12px);
+header{position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(10,13,18,.96);backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
-  padding:0 24px;height:60px;
-  display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:20px;color:var(--gold);font-style:italic;letter-spacing:2px;font-family:Georgia,serif}
-nav a{color:var(--text2);text-decoration:none;font-size:14px;margin-left:24px;transition:.2s}
-nav a:hover{color:var(--gold)}
-
-/* ── HERO ── */
-.hero{background:linear-gradient(160deg,#080c14,#131d2e 55%,#080c14);
-  text-align:center;padding:80px 20px 64px;border-bottom:1px solid var(--border)}
-.hero-tag{font-size:11px;color:var(--gold);letter-spacing:5px;text-transform:uppercase;margin-bottom:14px}
-.hero h1{font-size:clamp(40px,8vw,86px);color:var(--gold);font-family:Georgia,serif;
-  font-style:italic;margin-bottom:14px;text-shadow:0 0 50px rgba(201,168,76,.28);line-height:1.05}
-.hero p{color:var(--text2);font-size:16px;max-width:420px;margin:0 auto 36px;line-height:1.7}
-.hero-btn{display:inline-block;background:linear-gradient(135deg,var(--gold),#9a7228);
-  color:#0d1117;padding:14px 40px;border-radius:8px;font-weight:700;font-size:15px;
-  text-decoration:none;transition:.25s}
-.hero-btn:hover{filter:brightness(1.1);transform:translateY(-2px)}
-
-/* ── WRAP ── */
-.wrap{max-width:900px;margin:0 auto;padding:44px 16px 60px}
-
-/* ── STEPPER ── */
-.stepper{display:flex;align-items:center;justify-content:center;
-  margin-bottom:36px;gap:0;flex-wrap:nowrap}
-.step{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
-.step-num{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);
-  background:var(--d2);color:var(--text2);font-size:14px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;transition:.3s;flex-shrink:0}
-.step.done .step-num{background:var(--gold);border-color:var(--gold);color:#0d1117}
-.step.active .step-num{border-color:var(--gold);color:var(--gold);
-  box-shadow:0 0 0 4px rgba(201,168,76,.15)}
-.step-lbl{font-size:11px;color:var(--text2);text-align:center;white-space:nowrap;
-  transition:.3s;line-height:1.3}
-.step.active .step-lbl,.step.done .step-lbl{color:var(--gold)}
-.step-line{width:60px;height:2px;background:var(--border);margin-bottom:20px;
-  transition:.3s;flex-shrink:0}
-.step-line.done{background:var(--gold)}
-@media(max-width:480px){
-  .step-lbl{display:none}
-  .step-line{width:32px}
-  .step-num{width:30px;height:30px;font-size:12px}
+  height:68px;display:flex;align-items:center;padding:0 32px;
+  justify-content:space-between}
+.logo{font-size:22px;color:var(--gold);font-style:italic;letter-spacing:3px;
+  font-family:Georgia,serif;cursor:pointer}
+.logo span{font-size:13px;display:block;letter-spacing:4px;color:var(--text2);
+  font-style:normal;margin-top:-2px}
+nav{display:flex;gap:4px}
+nav a{color:var(--text2);text-decoration:none;font-size:13px;padding:8px 14px;
+  border-radius:6px;transition:.2s;letter-spacing:.3px}
+nav a:hover,nav a.active{color:var(--gold);background:rgba(201,168,76,.08)}
+.nav-book{background:linear-gradient(135deg,var(--gold),#9a7228)!important;
+  color:#0a0d12!important;font-weight:700;padding:9px 20px!important}
+.nav-book:hover{filter:brightness(1.1)!important;background:linear-gradient(135deg,var(--gold),#9a7228)!important}
+.burger{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:8px}
+@media(max-width:720px){
+  nav{display:none;position:fixed;top:68px;left:0;right:0;background:var(--dark2);
+    flex-direction:column;padding:16px;border-bottom:1px solid var(--border);gap:4px}
+  nav.open{display:flex}
+  nav a{padding:12px 16px}
+  .burger{display:block}
 }
 
-/* ── CARD ── */
-.card{background:var(--d2);border:1px solid var(--border);border-radius:12px;padding:28px}
-.card-title{color:var(--gold);font-size:18px;font-family:Georgia,serif;
-  margin-bottom:6px;display:flex;align-items:center;gap:10px}
-.card-sub{color:var(--text2);font-size:13px;margin-bottom:24px}
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-top:68px}
+.page.active{display:block}
 
-/* ── FIELDS ── */
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+/* ═══════════════════ HOME PAGE ═══════════════════ */
+#page-home{}
+
+/* Hero */
+.hero{height:100vh;position:relative;display:flex;align-items:center;
+  justify-content:center;text-align:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;
+  background:linear-gradient(160deg,#050810 0%,#0d1828 40%,#140a18 70%,#050810 100%)}
+.hero-particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:var(--gold);
+  border-radius:50%;opacity:0;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0}
+  10%{opacity:.6}90%{opacity:.3}100%{transform:translateY(-10vh) translateX(40px);opacity:0}}
+.hero-content{position:relative;z-index:2;padding:20px}
+.hero-eyebrow{font-size:11px;color:var(--gold);letter-spacing:6px;text-transform:uppercase;
+  margin-bottom:20px;opacity:.8}
+.hero-title{font-size:clamp(52px,10vw,110px);color:var(--gold);font-family:Georgia,serif;
+  font-style:italic;line-height:.95;text-shadow:0 0 80px rgba(201,168,76,.3)}
+.hero-title span{display:block;font-size:clamp(14px,2vw,20px);font-style:normal;
+  color:var(--text2);letter-spacing:6px;text-transform:uppercase;margin-top:12px;
+  font-family:'Segoe UI',sans-serif}
+.hero-desc{font-size:16px;color:var(--text2);max-width:480px;margin:24px auto 40px;line-height:1.8}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-block;background:linear-gradient(135deg,var(--gold),#9a7228);
+  color:#0a0d12;padding:15px 40px;border-radius:8px;font-weight:700;font-size:15px;
+  text-decoration:none;transition:.25s;cursor:pointer;border:none;font-family:inherit;letter-spacing:.3px}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.3)}
+.btn-secondary{display:inline-block;border:1px solid var(--border);color:var(--text2);
+  padding:14px 36px;border-radius:8px;font-size:15px;text-decoration:none;
+  transition:.25s;cursor:pointer;background:transparent;font-family:inherit}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  color:var(--text3);font-size:12px;letter-spacing:2px;text-align:center;z-index:2}
+.scroll-line{width:1px;height:40px;background:var(--gold);margin:8px auto 0;
+  animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{opacity:.3;transform:scaleY(.5) translateY(-10px)}
+  50%{opacity:1;transform:scaleY(1) translateY(0)}}
+
+/* Features strip */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feat{background:var(--dark2);padding:28px 24px;text-align:center;transition:.3s}
+.feat:hover{background:var(--dark3)}
+.feat-icon{font-size:28px;margin-bottom:10px}
+.feat-title{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.5px;margin-bottom:6px}
+.feat-text{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* About section */
+.section{padding:80px 32px;max-width:1100px;margin:0 auto}
+.sec-label{font-size:11px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-size:clamp(28px,4vw,44px);color:var(--text);font-family:Georgia,serif;
+  line-height:1.2;margin-bottom:20px}
+.sec-title em{color:var(--gold);font-style:italic}
+.sec-text{font-size:15px;color:var(--text2);line-height:1.9;max-width:560px}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr}}
+.about-visual{position:relative}
+.about-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.about-card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:24px;
+  transition:.3s}
+.about-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.about-card-num{font-size:36px;font-weight:700;color:var(--gold);font-family:Georgia,serif;line-height:1}
+.about-card-label{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* Zones section */
+.zones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+@media(max-width:768px){.zones-grid{grid-template-columns:1fr}}
+.zone-card{background:var(--dark2);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;transition:.3s}
+.zone-card:hover{border-color:var(--gold);transform:translateY(-4px)}
+.zone-card-img{height:160px;display:flex;align-items:center;justify-content:center;
+  font-size:56px;position:relative;overflow:hidden}
+.zone-main-bg{background:linear-gradient(135deg,#0d1828,#1a2438)}
+.zone-terrace-bg{background:linear-gradient(135deg,#061018,#0a1e20)}
+.zone-vip-bg{background:linear-gradient(135deg,#130820,#1e0d28)}
+.zone-card-body{padding:20px}
+.zone-card-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.zone-card-text{font-size:13px;color:var(--text2);line-height:1.6}
+.zone-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;
+  font-weight:600;margin-top:10px}
+
+/* Menu section */
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:40px}
+.menu-card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;
+  padding:24px;transition:.3s}
+.menu-card:hover{border-color:rgba(201,168,76,.4);background:var(--dark3)}
+.menu-card-cat{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.menu-item{display:flex;justify-content:space-between;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);gap:12px}
+.menu-item:last-child{border-bottom:none}
+.menu-item-name{font-size:14px;color:var(--text)}
+.menu-item-desc{font-size:12px;color:var(--text2);margin-top:2px}
+.menu-item-price{font-size:14px;font-weight:700;color:var(--gold);flex-shrink:0}
+
+/* Gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:220px 220px;
+  gap:12px;margin-top:40px}
+@media(max-width:640px){.gallery-grid{grid-template-columns:1fr;grid-template-rows:auto}}
+.gallery-item{border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:48px;
+  transition:.3s}
+.gallery-item:hover{transform:scale(1.02)}
+.gallery-item:nth-child(1){grid-column:span 2;background:linear-gradient(135deg,#0d1828,#1a243c);font-size:72px}
+.gallery-item:nth-child(2){background:linear-gradient(135deg,#130820,#1e1030)}
+.gallery-item:nth-child(3){background:linear-gradient(135deg,#061018,#0a1e20)}
+.gallery-item:nth-child(4){background:linear-gradient(135deg,#1a0a10,#280d16)}
+.gallery-item:nth-child(5){grid-column:span 2;background:linear-gradient(135deg,#0d1420,#182030);font-size:72px}
+.gallery-label{position:absolute;bottom:0;left:0;right:0;padding:16px;
+  background:linear-gradient(transparent,rgba(0,0,0,.7));
+  color:var(--text);font-size:13px;font-weight:600}
+
+/* Contacts */
+.contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+@media(max-width:640px){.contacts-grid{grid-template-columns:1fr}}
+.contact-block{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:28px}
+.contact-title{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:16px;letter-spacing:.5px}
+.contact-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;font-size:14px}
+.contact-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.contact-val{color:var(--text);line-height:1.5}
+.contact-val span{display:block;font-size:12px;color:var(--text2)}
+.map-placeholder{background:var(--dark3);border-radius:8px;height:200px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;margin-top:16px;border:1px solid var(--border);flex-direction:column;gap:8px}
+.map-placeholder p{font-size:12px;color:var(--text2)}
+
+/* Divider */
+.gold-divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 32px;opacity:.4}
+
+/* ═══════════════════ BOOKING PAGE ═══════════════════ */
+#page-booking .booking-wrap{max-width:960px;margin:0 auto;padding:40px 16px 60px}
+
+/* Stepper */
+.stepper{display:flex;align-items:center;justify-content:center;margin-bottom:40px;gap:0}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px}
+.step-num{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.1);
+  background:var(--dark2);color:var(--text3);font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;transition:.4s;flex-shrink:0}
+.step.done .step-num{background:var(--gold);border-color:var(--gold);color:#0a0d12}
+.step.active .step-num{border-color:var(--gold);color:var(--gold);
+  box-shadow:0 0 0 5px rgba(201,168,76,.12)}
+.step-lbl{font-size:11px;color:var(--text3);text-align:center;transition:.3s;
+  line-height:1.3;white-space:nowrap}
+.step.active .step-lbl,.step.done .step-lbl{color:var(--gold)}
+.step-line{width:56px;height:2px;background:rgba(255,255,255,.08);
+  margin-bottom:20px;transition:.4s;flex-shrink:0}
+.step-line.done{background:var(--gold)}
+@media(max-width:480px){
+  .step-lbl{font-size:9px}
+  .step-line{width:28px}
+  .step-num{width:32px;height:32px;font-size:12px}
+}
+
+/* Booking card */
+.bcard{background:var(--dark2);border:1px solid var(--border);border-radius:14px;
+  padding:32px;margin-bottom:0}
+.bcard-title{color:var(--gold);font-size:20px;font-family:Georgia,serif;
+  margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.bcard-sub{color:var(--text2);font-size:14px;margin-bottom:28px;line-height:1.6}
+
+/* Form fields */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
 @media(max-width:540px){.fgrid{grid-template-columns:1fr}}
 .full{grid-column:1/-1}
 @media(max-width:540px){.full{grid-column:1}}
-.fld{display:flex;flex-direction:column;gap:5px}
-.fld label{font-size:11px;color:var(--gold);letter-spacing:1px;text-transform:uppercase}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-size:11px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;font-weight:600}
 .fld input,.fld select,.fld textarea{
-  background:var(--d3);border:1px solid var(--border);color:var(--text);
-  padding:11px 14px;border-radius:7px;font-size:15px;font-family:inherit;
-  transition:.2s;-webkit-appearance:none}
-.fld select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+  background:var(--dark3);border:1px solid var(--border);color:var(--text);
+  padding:12px 15px;border-radius:8px;font-size:15px;font-family:inherit;
+  transition:.2s;-webkit-appearance:none;outline:none}
+.fld select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
 .fld input:focus,.fld select:focus,.fld textarea:focus{
-  outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
 .fld textarea{resize:vertical;min-height:80px}
-.fld-hint{font-size:11px;color:var(--text2);margin-top:2px}
+.fld-hint{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* ── BUTTONS ── */
-.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-.btn{padding:12px 28px;border-radius:8px;font-size:15px;cursor:pointer;
-  border:none;font-family:inherit;transition:.2s;font-weight:600}
-.btn-gold{background:linear-gradient(135deg,var(--gold),#9a7228);color:#0d1117}
-.btn-gold:hover{filter:brightness(1.1)}
-.btn-gold:disabled{opacity:.5;cursor:not-allowed}
-.btn-out{background:transparent;border:1px solid var(--border);color:var(--text2)}
-.btn-out:hover{border-color:var(--gold);color:var(--gold)}
+/* Buttons */
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.btn{padding:13px 28px;border-radius:8px;font-size:15px;cursor:pointer;border:none;
+  font-family:inherit;transition:.2s;font-weight:600;letter-spacing:.2px}
+.btng{background:linear-gradient(135deg,var(--gold),#9a7228);color:#0a0d12}
+.btng:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btng:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btno{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btno:hover{border-color:var(--gold);color:var(--gold)}
 
-/* ── STEP 2: HALL ── */
-.hall-outer{border-radius:12px;overflow:hidden;border:1px solid var(--border);
-  background:#06080e;margin-bottom:16px}
-
-/* Hall legend */
-.hall-legend{display:flex;gap:20px;flex-wrap:wrap;padding:12px 16px;
-  background:var(--d2);border-bottom:1px solid var(--border)}
+/* ── HALL SVG ── */
+.hall-container{background:#060810;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);margin-bottom:20px;padding:16px}
+.hall-legend{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;
+  border-bottom:1px solid var(--border)}
 .leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)}
 .ldot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.hall-svg-wrap{position:relative;width:100%;padding-bottom:62%;min-height:300px}
+.hall-svg-wrap svg{position:absolute;inset:0;width:100%;height:100%}
 
-/* Zones container */
-.hall-zones{display:grid;grid-template-rows:auto auto auto;gap:0}
+/* Selected table info */
+.sel-banner{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);
+  border-radius:10px;padding:14px 18px;margin-bottom:20px;display:none}
+.sel-banner-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.sel-banner-sub{font-size:13px;color:var(--text2)}
+.sel-banner-sub b{color:var(--blue)}
 
-/* Single zone */
-.zone{position:relative;padding:20px 16px 16px;border-bottom:1px solid rgba(201,168,76,.08)}
-.zone:last-child{border-bottom:none}
-.zone-label{position:absolute;top:8px;left:12px;
-  font-size:10px;color:rgba(201,168,76,.7);letter-spacing:2px;
-  text-transform:uppercase;background:rgba(201,168,76,.08);
-  padding:3px 8px;border-radius:3px;pointer-events:none}
-.zone-main{background:linear-gradient(180deg,#080d18,#060b14)}
-.zone-terrace{background:linear-gradient(180deg,#060d10,#050b0d)}
-.zone-vip{background:linear-gradient(180deg,#100810,#0d060d)}
-
-/* Tables row */
-.tables-row{display:flex;gap:12px;flex-wrap:wrap;
-  padding-top:28px;justify-content:center;min-height:90px;align-items:center}
-
-/* Single table element */
-.t{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;user-select:none;position:relative;flex-shrink:0}
-.t-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:100%;height:100%}
-.t .tn{font-size:12px;font-weight:700;color:#fff;line-height:1.2}
-.t .tc{font-size:10px;color:rgba(255,255,255,.7)}
-.t.round .t-inner{border-radius:50%}
-.t.rect .t-inner{border-radius:8px}
-.t.free .t-inner{background:radial-gradient(circle,#22c55e,#15803d);
-  border:2px solid #16a34a;box-shadow:0 0 10px rgba(34,197,94,.2)}
-.t.free:hover{transform:scale(1.1)}
-.t.free:hover .t-inner{box-shadow:0 0 20px rgba(34,197,94,.5)}
-.t.busy .t-inner{background:radial-gradient(circle,#ef4444,#991b1b);
-  border:2px solid #dc2626;opacity:.75}
-.t.busy{cursor:not-allowed}
-.t.sel .t-inner{background:radial-gradient(circle,#60a5fa,#1d4ed8);
-  border:2px solid #3b82f6;box-shadow:0 0 20px rgba(59,130,246,.5);
-  animation:tglow .9s ease-in-out infinite alternate}
-@keyframes tglow{from{box-shadow:0 0 8px rgba(59,130,246,.3)}to{box-shadow:0 0 24px rgba(59,130,246,.7)}}
-
-/* Tooltip */
-.t .tip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
-  transform:translateX(-50%);background:var(--d2);border:1px solid var(--gold);
-  border-radius:6px;padding:6px 12px;font-size:11px;white-space:nowrap;z-index:30;
-  box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.t .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
-  border:5px solid transparent;border-top-color:var(--gold)}
-@media(hover:hover){.t:not(.busy):hover .tip{display:block}}
-
-/* Zone description */
-.zone-desc{text-align:center;margin-top:14px;font-size:12px;color:var(--text2);
-  padding-top:10px;border-top:1px solid rgba(255,255,255,.04)}
-
-/* Selected info */
-.sel-info{background:var(--d3);border:1px solid rgba(59,130,246,.3);border-radius:8px;
-  padding:12px 16px;font-size:13px;color:var(--text2);margin-bottom:16px;display:none}
-.sel-info b{color:var(--blue)}
-.sel-info .sel-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
-
-/* ── STEP 3: REGISTRATION ── */
-.reg-note{background:var(--d3);border:1px solid var(--border);border-radius:8px;
-  padding:12px 16px;font-size:13px;color:var(--text2);margin-bottom:20px;
-  display:flex;gap:10px;align-items:flex-start}
-.reg-note-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-
-/* ── STEP 4: CONFIRMATION ── */
-.conf-block{background:var(--d3);border:1px solid var(--border);border-radius:10px;
-  overflow:hidden;margin-bottom:16px}
-.conf-block-title{padding:12px 16px;background:rgba(201,168,76,.08);
-  border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--gold);
-  letter-spacing:.5px;text-transform:uppercase}
-.conf-rows{padding:4px 0}
+/* Confirmation blocks */
+.conf-block{background:var(--dark3);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;margin-bottom:14px}
+.conf-block-hdr{padding:11px 16px;background:rgba(201,168,76,.07);
+  border-bottom:1px solid var(--border);font-size:12px;font-weight:700;
+  color:var(--gold);letter-spacing:1px;text-transform:uppercase}
 .conf-row{display:flex;justify-content:space-between;align-items:baseline;
-  padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);gap:16px}
+  padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);gap:12px}
 .conf-row:last-child{border-bottom:none}
-.conf-key{font-size:13px;color:var(--text2);flex-shrink:0}
-.conf-val{font-size:13px;color:var(--text);text-align:right;font-weight:500}
-.conf-badge{display:inline-block;background:rgba(34,197,94,.12);border:1px solid #22c55e;
-  color:#4ade80;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600}
+.conf-k{font-size:13px;color:var(--text2);flex-shrink:0}
+.conf-v{font-size:13px;color:var(--text);text-align:right;font-weight:500}
 
-/* ── SUCCESS ── */
-#step-success{display:none;text-align:center;padding:20px 0}
-.success-icon{font-size:64px;margin-bottom:20px}
-.success-title{font-size:24px;color:var(--green);font-family:Georgia,serif;margin-bottom:10px}
-.success-sub{color:var(--text2);font-size:15px;line-height:1.6;max-width:400px;margin:0 auto 28px}
+/* Success */
+.success-card{text-align:center;padding:48px 24px}
+.success-icon{font-size:72px;margin-bottom:20px}
+.success-title{font-size:26px;color:var(--green);font-family:Georgia,serif;margin-bottom:10px}
+.success-sub{color:var(--text2);font-size:15px;line-height:1.8;max-width:420px;margin:0 auto 28px}
 .success-num{display:inline-block;background:rgba(34,197,94,.1);border:1px solid var(--green);
-  color:var(--green);padding:8px 24px;border-radius:8px;font-size:20px;font-weight:700;
-  margin-bottom:28px}
+  color:var(--green);padding:8px 28px;border-radius:8px;font-size:22px;font-weight:700;margin-bottom:32px}
 
-/* ── MSG ── */
-.msg{padding:12px 16px;border-radius:8px;font-size:14px;display:none;margin-top:14px;line-height:1.5}
+/* MSG */
+.msg{padding:13px 16px;border-radius:8px;font-size:14px;display:none;
+  margin-top:16px;line-height:1.5}
 .msg.ok{background:rgba(34,197,94,.1);border:1px solid #22c55e;color:#4ade80}
 .msg.err{background:rgba(220,38,38,.1);border:1px solid #dc2626;color:#f87171}
 
-footer{text-align:center;padding:24px;color:var(--text2);
-  font-size:13px;border-top:1px solid var(--border);margin-top:40px}
+/* footer */
+footer{background:var(--dark2);border-top:1px solid var(--border);
+  padding:40px 32px 24px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;
+  max-width:1100px;margin:0 auto 32px}
+@media(max-width:640px){.footer-grid{grid-template-columns:1fr}}
+.footer-logo{font-size:22px;color:var(--gold);font-style:italic;
+  font-family:Georgia,serif;letter-spacing:2px;margin-bottom:10px}
+.footer-desc{font-size:13px;color:var(--text2);line-height:1.7;max-width:280px}
+.footer-col-title{font-size:11px;color:var(--gold);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:14px;font-weight:700}
+.footer-links{display:flex;flex-direction:column;gap:8px}
+.footer-links a{font-size:13px;color:var(--text2);text-decoration:none;
+  transition:.2s;cursor:pointer}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{text-align:center;padding-top:24px;border-top:1px solid var(--border);
+  font-size:12px;color:var(--text3);max-width:1100px;margin:0 auto}
 </style>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <header>
-  <div class="logo">✦ La Maison</div>
-  <nav>
-    <a href="#top">О ресторане</a>
-    <a href="#book">Бронирование</a>
+  <div class="logo" onclick="showPage('home')">La Maison<span>Ресторан · Казань</span></div>
+  <button class="burger" id="burger">☰</button>
+  <nav id="main-nav">
+    <a href="#" onclick="showPage('home')" data-page="home" class="active">Главная</a>
+    <a href="#" onclick="showPage('menu')" data-page="menu">Меню</a>
+    <a href="#" onclick="showPage('about')" data-page="about">О нас</a>
+    <a href="#" onclick="showPage('gallery')" data-page="gallery">Галерея</a>
+    <a href="#" onclick="showPage('contacts')" data-page="contacts">Контакты</a>
+    <a href="#" onclick="showPage('booking')" data-page="booking" class="nav-book">Забронировать</a>
   </nav>
 </header>
 
-<section class="hero" id="top">
-  <div class="hero-tag">Изысканная кухня · Казань</div>
-  <h1>La Maison</h1>
-  <p>Забронируйте стол онлайн — выберите удобное место прямо на схеме зала</p>
-  <a href="#book" class="hero-btn">Забронировать стол</a>
-</section>
-
-<div class="wrap" id="book">
-
-  <!-- STEPPER -->
-  <div class="stepper" id="stepper">
-    <div class="step active" id="st1">
-      <div class="step-num">1</div>
-      <div class="step-lbl">Дата<br>и время</div>
+<!-- ══════════════ HOME ══════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Изысканная кухня · Казань · 2019</div>
+      <div class="hero-title">La Maison
+        <span>Ресторан высокой кухни</span>
+      </div>
+      <div class="hero-desc">Место, где каждый вечер становится особенным. Авторская кухня, живая музыка и безупречный сервис в сердце Казани.</div>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('booking')">Забронировать стол</button>
+        <button class="btn-secondary" onclick="showPage('menu')">Посмотреть меню</button>
+      </div>
     </div>
-    <div class="step-line" id="sl1"></div>
-    <div class="step" id="st2">
-      <div class="step-num">2</div>
-      <div class="step-lbl">Выбор<br>стола</div>
-    </div>
-    <div class="step-line" id="sl2"></div>
-    <div class="step" id="st3">
-      <div class="step-num">3</div>
-      <div class="step-lbl">Ваши<br>данные</div>
-    </div>
-    <div class="step-line" id="sl3"></div>
-    <div class="step" id="st4">
-      <div class="step-num">4</div>
-      <div class="step-lbl">Подтверж-<br>дение</div>
+    <div class="hero-scroll">прокрутите
+      <div class="scroll-line"></div>
     </div>
   </div>
 
-  <!-- ═══ ШАГ 1: Дата и время ═══ -->
-  <div id="step1">
-    <div class="card">
-      <div class="card-title">📅 Параметры визита</div>
-      <div class="card-sub">Выберите дату, время и количество гостей для поиска доступных столов</div>
-      <div class="fgrid">
-        <div class="fld">
-          <label>Дата посещения</label>
-          <input type="date" id="r-date"/>
-        </div>
-        <div class="fld">
-          <label>Время начала</label>
-          <input type="time" id="r-time" value="19:00" min="10:00" max="23:00"/>
-        </div>
-        <div class="fld">
-          <label>Продолжительность</label>
-          <select id="r-dur">
-            <option value="60">1 час</option>
-            <option value="90">1 час 30 минут</option>
-            <option value="120" selected>2 часа</option>
-            <option value="180">3 часа</option>
-            <option value="240">4 часа</option>
-          </select>
-        </div>
-        <div class="fld">
-          <label>Количество гостей</label>
-          <input type="number" id="r-guests" value="2" min="1" max="20"/>
-          <span class="fld-hint">Включая вас</span>
-        </div>
-      </div>
-      <div class="btns">
-        <button class="btn btn-gold" id="btn-find">Показать доступные столы →</button>
-      </div>
-      <div class="msg" id="msg1"></div>
-    </div>
+  <div class="features">
+    <div class="feat"><div class="feat-icon">🍽️</div><div class="feat-title">Авторская кухня</div><div class="feat-text">Блюда от шеф-повара с мишленовским опытом</div></div>
+    <div class="feat"><div class="feat-icon">🎵</div><div class="feat-title">Живая музыка</div><div class="feat-text">Джаз и классика по пятницам и субботам</div></div>
+    <div class="feat"><div class="feat-icon">🥂</div><div class="feat-title">Винная карта</div><div class="feat-text">Более 120 позиций со всего мира</div></div>
+    <div class="feat"><div class="feat-icon">👑</div><div class="feat-title">VIP-обслуживание</div><div class="feat-text">Приватные залы и персональный сомелье</div></div>
   </div>
 
-  <!-- ═══ ШАГ 2: Схема зала ═══ -->
-  <div id="step2" style="display:none">
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:22px 24px 16px">
-        <div class="card-title">🪑 Схема зала</div>
-        <div class="card-sub" id="step2-sub">Нажмите на свободный стол для выбора</div>
+  <div class="section">
+    <div class="about-grid">
+      <div>
+        <div class="sec-label">О ресторане</div>
+        <h2 class="sec-title">Место, где <em>время останавливается</em></h2>
+        <p class="sec-text">La Maison открылся в 2019 году с одной целью — создать пространство, в котором гастрономия становится искусством. Наш шеф-повар Артём Ковалёв прошёл стажировку в ресторанах Парижа и Барселоны, привнося лучшее европейское в каждое блюдо.</p>
+        <p class="sec-text" style="margin-top:16px">Зал рассчитан на 60 гостей, разделён на три зоны: классический основной зал, уютную террасу у панорамных окон и приватный VIP-зал для особых случаев.</p>
+        <button class="btn-primary" style="margin-top:28px" onclick="showPage('about')">Узнать больше</button>
       </div>
-
-      <!-- Selected info banner -->
-      <div class="sel-info" id="sel-info" style="margin:0 24px 16px">
-        <div class="sel-name" id="sel-name"></div>
-        <div id="sel-details"></div>
-      </div>
-
-      <!-- Hall legend -->
-      <div class="hall-legend">
-        <div class="leg"><div class="ldot" style="background:#22c55e"></div>Свободен</div>
-        <div class="leg"><div class="ldot" style="background:#ef4444"></div>Занят</div>
-        <div class="leg"><div class="ldot" style="background:#3b82f6"></div>Выбран</div>
-        <div class="leg" style="margin-left:auto;color:var(--text2);font-size:11px">
-          🖱 Наведите на стол для информации
+      <div class="about-visual">
+        <div class="about-cards">
+          <div class="about-card"><div class="about-card-num">5★</div><div class="about-card-label">Рейтинг на Tripadvisor</div></div>
+          <div class="about-card"><div class="about-card-num">60</div><div class="about-card-label">Посадочных мест</div></div>
+          <div class="about-card"><div class="about-card-num">120+</div><div class="about-card-label">Позиций в меню</div></div>
+          <div class="about-card"><div class="about-card-num">2019</div><div class="about-card-label">Год открытия</div></div>
         </div>
-      </div>
-
-      <!-- ZONES -->
-      <div class="hall-outer" style="border:none;border-radius:0">
-        <!-- Основной зал -->
-        <div class="zone zone-main">
-          <div class="zone-label">Основной зал</div>
-          <div class="tables-row" id="zone-main"></div>
-          <div class="zone-desc">Центральный зал ресторана · Уютная атмосфера · Фоновая музыка</div>
-        </div>
-        <!-- Терраса -->
-        <div class="zone zone-terrace" style="background:linear-gradient(180deg,#060d10,#050b0d)">
-          <div class="zone-label" style="color:rgba(20,184,166,.7);background:rgba(20,184,166,.08)">Терраса</div>
-          <div class="tables-row" id="zone-terrace"></div>
-          <div class="zone-desc">Светлая терраса у окон · Панорамный вид · Дневное освещение</div>
-        </div>
-        <!-- VIP зал -->
-        <div class="zone zone-vip" style="background:linear-gradient(180deg,#100810,#0d060d)">
-          <div class="zone-label" style="color:rgba(168,85,247,.7);background:rgba(168,85,247,.08)">VIP-зал</div>
-          <div class="tables-row" id="zone-vip"></div>
-          <div class="zone-desc">Приватная зона · Повышенный комфорт · Отдельное обслуживание</div>
-        </div>
-      </div>
-
-      <div style="padding:16px 24px 22px">
-        <div class="btns">
-          <button class="btn btn-out" id="btn-back1">← Изменить параметры</button>
-          <button class="btn btn-gold" id="btn-next2" disabled>Продолжить →</button>
-        </div>
-        <div class="msg" id="msg2"></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ ШАГ 3: Данные гостя ═══ -->
-  <div id="step3" style="display:none">
-    <div class="card">
-      <div class="card-title">👤 Ваши данные</div>
-      <div class="card-sub">Заполните контактную информацию. Если вы бронировали у нас раньше — введите email и данные подставятся автоматически.</div>
+  <div class="gold-divider"></div>
 
-      <div class="reg-note">
-        <div class="reg-note-icon">💡</div>
-        <div>Укажите актуальный email — на него мы свяжемся для подтверждения брони. При повторном бронировании ваши данные сохраняются автоматически.</div>
-      </div>
-
-      <div class="fgrid">
-        <div class="fld full">
-          <label>Электронная почта *</label>
-          <input type="email" id="f-email" placeholder="mail@example.com" autocomplete="email"/>
-          <span class="fld-hint" id="email-hint"></span>
-        </div>
-        <div class="fld">
-          <label>Фамилия и имя *</label>
-          <input type="text" id="f-name" placeholder="Иванова Мария Сергеевна" autocomplete="name"/>
-        </div>
-        <div class="fld">
-          <label>Номер телефона *</label>
-          <input type="tel" id="f-phone" placeholder="+7 900 000-00-00" autocomplete="tel"/>
-        </div>
-        <div class="fld full">
-          <label>Особые пожелания</label>
-          <textarea id="f-req" placeholder="Аллергия на орехи, детский стул, украшение стола, живая музыка…"></textarea>
-          <span class="fld-hint">Необязательно — мы постараемся учесть ваши пожелания</span>
+  <div class="section">
+    <div class="sec-label">Наши зоны</div>
+    <h2 class="sec-title">Выберите <em>идеальное место</em></h2>
+    <div class="zones-grid">
+      <div class="zone-card">
+        <div class="zone-card-img zone-main-bg">🪑</div>
+        <div class="zone-card-body">
+          <div class="zone-card-title">Основной зал</div>
+          <div class="zone-card-text">Сердце ресторана с живой атмосферой и классическим декором. Столы на 2 и 4 гостей, идеально для деловых встреч и романтических ужинов.</div>
+          <div class="zone-tag" style="background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.3)">8 столов · 2–4 места</div>
         </div>
       </div>
-      <div class="btns">
-        <button class="btn btn-out" id="btn-back2">← Выбрать другой стол</button>
-        <button class="btn btn-gold" id="btn-next3">Далее: подтверждение →</button>
+      <div class="zone-card">
+        <div class="zone-card-img zone-terrace-bg">🌿</div>
+        <div class="zone-card-body">
+          <div class="zone-card-title">Терраса</div>
+          <div class="zone-card-text">Светлая зона у панорамных окон с видом на город. Лёгкая атмосфера, естественное освещение, идеально для бизнес-ланчей.</div>
+          <div class="zone-tag" style="background:rgba(20,184,166,.1);color:#2dd4bf;border:1px solid rgba(20,184,166,.3)">2 стола · 2–6 мест</div>
+        </div>
       </div>
-      <div class="msg" id="msg3"></div>
+      <div class="zone-card">
+        <div class="zone-card-img zone-vip-bg">👑</div>
+        <div class="zone-card-body">
+          <div class="zone-card-title">VIP-зал</div>
+          <div class="zone-card-text">Изолированный приватный зал для особых мероприятий. Персональный официант, звукоизоляция, возможность украшения зала.</div>
+          <div class="zone-tag" style="background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.3)">2 стола · 4–8 мест</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ═══ ШАГ 4: Подтверждение ═══ -->
-  <div id="step4" style="display:none">
-    <div class="card">
-      <div class="card-title">✅ Подтверждение бронирования</div>
-      <div class="card-sub">Проверьте данные и подтвердите бронирование</div>
-
-      <!-- Блок: стол -->
-      <div class="conf-block">
-        <div class="conf-block-title">🪑 Стол и время</div>
-        <div class="conf-rows">
-          <div class="conf-row"><span class="conf-key">Стол</span><span class="conf-val" id="c-table">—</span></div>
-          <div class="conf-row"><span class="conf-key">Зона</span><span class="conf-val" id="c-zone">—</span></div>
-          <div class="conf-row"><span class="conf-key">Вместимость</span><span class="conf-val" id="c-seats">—</span></div>
-          <div class="conf-row"><span class="conf-key">Дата</span><span class="conf-val" id="c-date">—</span></div>
-          <div class="conf-row"><span class="conf-key">Время</span><span class="conf-val" id="c-time">—</span></div>
-          <div class="conf-row"><span class="conf-key">Продолжительность</span><span class="conf-val" id="c-dur">—</span></div>
-          <div class="conf-row"><span class="conf-key">Количество гостей</span><span class="conf-val" id="c-guests">—</span></div>
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">La Maison</div>
+        <div class="footer-desc">Ресторан высокой кухни в центре Казани. Открыты ежедневно с 12:00 до 00:00.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Навигация</div>
+        <div class="footer-links">
+          <a onclick="showPage('home')">Главная</a>
+          <a onclick="showPage('menu')">Меню</a>
+          <a onclick="showPage('about')">О нас</a>
+          <a onclick="showPage('gallery')">Галерея</a>
+          <a onclick="showPage('contacts')">Контакты</a>
         </div>
       </div>
-
-      <!-- Блок: гость -->
-      <div class="conf-block">
-        <div class="conf-block-title">👤 Данные гостя</div>
-        <div class="conf-rows">
-          <div class="conf-row"><span class="conf-key">Имя</span><span class="conf-val" id="c-name">—</span></div>
-          <div class="conf-row"><span class="conf-key">Телефон</span><span class="conf-val" id="c-phone">—</span></div>
-          <div class="conf-row"><span class="conf-key">E-mail</span><span class="conf-val" id="c-email">—</span></div>
-          <div class="conf-row" id="c-req-row" style="display:none">
-            <span class="conf-key">Пожелания</span><span class="conf-val" id="c-req">—</span>
-          </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <div class="footer-links">
+          <a>📍 ул. Баумана, 44</a>
+          <a>📞 +7 (843) 555-12-34</a>
+          <a>✉️ info@lamaison.ru</a>
+          <a>⏰ Пн-Вс 12:00–00:00</a>
         </div>
       </div>
-
-      <!-- Статус -->
-      <div style="text-align:center;margin:4px 0 20px">
-        <span class="conf-badge">После подтверждения администратор свяжется с вами для уточнения деталей</span>
-      </div>
-
-      <div class="btns">
-        <button class="btn btn-out" id="btn-back3">← Изменить данные</button>
-        <button class="btn btn-gold" id="btn-submit">Подтвердить бронирование ✓</button>
-      </div>
-      <div class="msg" id="msg4"></div>
     </div>
-  </div>
-
-  <!-- ═══ УСПЕХ ═══ -->
-  <div id="step-success" style="display:none">
-    <div class="card" style="text-align:center;padding:48px 24px">
-      <div class="success-icon">🎉</div>
-      <div class="success-title">Стол успешно забронирован!</div>
-      <div class="success-num" id="success-num">Бронь №—</div>
-      <div class="success-sub">
-        Мы получили вашу заявку и свяжемся с вами для подтверждения.<br>
-        Проверьте электронную почту — туда придёт подтверждение.
-      </div>
-      <button class="btn btn-gold" id="btn-new" style="margin:0 auto">
-        Оформить ещё одно бронирование
-      </button>
-    </div>
-  </div>
-
+    <div class="footer-bottom">© 2026 La Maison. Все права защищены.</div>
+  </footer>
 </div>
 
-<footer>© 2026 La Maison · Все права защищены</footer>
+<!-- ══════════════ MENU ══════════════ -->
+<div class="page" id="page-menu">
+  <div class="section" style="padding-top:48px">
+    <div class="sec-label">Наше предложение</div>
+    <h2 class="sec-title">Меню <em>La Maison</em></h2>
+    <p class="sec-text">Авторские блюда на основе сезонных продуктов. Меню обновляется каждые три месяца.</p>
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="menu-card-cat">🥗 Закуски</div>
+        <div class="menu-item"><div><div class="menu-item-name">Тар-тар из тунца</div><div class="menu-item-desc">Авокадо, соус понзу, кунжут</div></div><div class="menu-item-price">890 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Карпаччо из говядины</div><div class="menu-item-desc">Пармезан, рукола, каперсы</div></div><div class="menu-item-price">820 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Гребешки на сковороде</div><div class="menu-item-desc">Сливочный соус, цветная капуста</div></div><div class="menu-item-price">1 290 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Фуа-гра с грушей</div><div class="menu-item-desc">Бриошь, портвейный соус</div></div><div class="menu-item-price">1 490 ₽</div></div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">🍜 Супы</div>
+        <div class="menu-item"><div><div class="menu-item-name">Луковый суп</div><div class="menu-item-desc">Грюйер, крутоны, тимьян</div></div><div class="menu-item-price">590 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Крем-суп из тыквы</div><div class="menu-item-desc">Кокосовое молоко, имбирь</div></div><div class="menu-item-price">550 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Биск из лангустинов</div><div class="menu-item-desc">Коньяк, сливки, эстрагон</div></div><div class="menu-item-price">990 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Консоме с трюфелем</div><div class="menu-item-desc">Перепелиное яйцо, зелёный лук</div></div><div class="menu-item-price">1 190 ₽</div></div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">🥩 Основные блюда</div>
+        <div class="menu-item"><div><div class="menu-item-name">Стейк рибай</div><div class="menu-item-desc">Картофель дофинуа, соус беарнез</div></div><div class="menu-item-price">2 890 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Утиная грудка конфи</div><div class="menu-item-desc">Чечевица, вишнёвый соус</div></div><div class="menu-item-price">1 890 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Сибас на гриле</div><div class="menu-item-desc">Фенхель, лимонное масло</div></div><div class="menu-item-price">1 690 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Ягнёнок в специях</div><div class="menu-item-desc">Кускус, йогурт с мятой</div></div><div class="menu-item-price">2 490 ₽</div></div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">🍰 Десерты</div>
+        <div class="menu-item"><div><div class="menu-item-name">Крем-брюле</div><div class="menu-item-desc">Ваниль Мадагаскар</div></div><div class="menu-item-price">490 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Шоколадный фондан</div><div class="menu-item-desc">Ванильное мороженое, малина</div></div><div class="menu-item-price">590 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Тарт татен</div><div class="menu-item-desc">Яблоки, карамель, взбитые сливки</div></div><div class="menu-item-price">520 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Сорбет трио</div><div class="menu-item-desc">Маракуйя, малина, лимон</div></div><div class="menu-item-price">450 ₽</div></div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">🍷 Вино и напитки</div>
+        <div class="menu-item"><div><div class="menu-item-name">Шампанское Moët &amp; Chandon</div><div class="menu-item-desc">150 мл</div></div><div class="menu-item-price">1 200 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Бордо Château Margaux</div><div class="menu-item-desc">150 мл</div></div><div class="menu-item-price">1 800 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Авторский коктейль</div><div class="menu-item-desc">Состав по сезону</div></div><div class="menu-item-price">650 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Свежевыжатый сок</div><div class="menu-item-desc">Апельсин, грейпфрут, яблоко</div></div><div class="menu-item-price">390 ₽</div></div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">☕ Кофе и чай</div>
+        <div class="menu-item"><div><div class="menu-item-name">Эспрессо La Maison</div><div class="menu-item-desc">Авторский бленд, Эфиопия</div></div><div class="menu-item-price">290 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Капучино</div><div class="menu-item-desc">Цельное молоко</div></div><div class="menu-item-price">340 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Чайная церемония</div><div class="menu-item-desc">Коллекция Tea Forte</div></div><div class="menu-item-price">490 ₽</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Горячий шоколад</div><div class="menu-item-desc">Valrhona 70%, взбитые сливки</div></div><div class="menu-item-price">420 ₽</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px">
+      <button class="btn-primary" onclick="showPage('booking')">Забронировать стол</button>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border-top:none">© 2026 La Maison · <a href="#" onclick="showPage('home')" style="color:var(--gold);text-decoration:none">На главную</a></div></footer>
+</div>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<div class="page" id="page-about">
+  <div class="section" style="padding-top:48px">
+    <div class="sec-label">История</div>
+    <h2 class="sec-title">Наша <em>история</em> и ценности</h2>
+    <div class="about-grid">
+      <div>
+        <p class="sec-text">La Maison — это не просто ресторан. Это идея о том, что каждый приём пищи может быть ритуалом удовольствия. Основатель ресторана Михаил Лаврентьев вдохновлялся маленькими семейными бистро Прованса, где еда — это способ выразить заботу о гостях.</p>
+        <p class="sec-text" style="margin-top:16px">Шеф-повар Артём Ковалёв работает с местными фермерами Татарстана, используя сезонные продукты в блюдах французской и средиземноморской кухни. Каждое блюдо — это история о вкусе и о месте, откуда пришли ингредиенты.</p>
+        <p class="sec-text" style="margin-top:16px">Наша команда из 24 человек ежедневно создаёт атмосферу, в которой хочется возвращаться снова. Мы гордимся тем, что 60% наших гостей — постоянные клиенты.</p>
+        <button class="btn-primary" style="margin-top:28px" onclick="showPage('booking')">Забронировать стол</button>
+      </div>
+      <div>
+        <div class="about-cards">
+          <div class="about-card"><div class="about-card-num">24</div><div class="about-card-label">Сотрудника</div></div>
+          <div class="about-card"><div class="about-card-num">60%</div><div class="about-card-label">Постоянных гостей</div></div>
+          <div class="about-card"><div class="about-card-num">14</div><div class="about-card-label">Фермеров-партнёров</div></div>
+          <div class="about-card"><div class="about-card-num">8 000+</div><div class="about-card-label">Гостей в год</div></div>
+        </div>
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:24px;margin-top:16px">
+          <div style="font-size:13px;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Часы работы</div>
+          <div style="font-size:14px;color:var(--text2);line-height:2">Пн–Чт: 12:00 – 23:00<br>Пт–Сб: 12:00 – 00:00<br>Воскресенье: 12:00 – 22:00<br><span style="color:var(--gold)">Кухня до 21:30</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border-top:none">© 2026 La Maison</div></footer>
+</div>
+
+<!-- ══════════════ GALLERY ══════════════ -->
+<div class="page" id="page-gallery">
+  <div class="section" style="padding-top:48px">
+    <div class="sec-label">Атмосфера</div>
+    <h2 class="sec-title">Галерея <em>La Maison</em></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="grid-column:span 2;background:linear-gradient(135deg,#0d1828,#1a243c)">🥂<div class="gallery-label">Основной зал</div></div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#130820,#200d30)">👑<div class="gallery-label">VIP-зал</div></div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#061018,#0a1e20)">🌿<div class="gallery-label">Терраса</div></div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#180a10,#280d16)">🍽️<div class="gallery-label">Кухня</div></div>
+      <div class="gallery-item" style="grid-column:span 2;background:linear-gradient(135deg,#0d1420,#182030)">🎵<div class="gallery-label">Живая музыка по пятницам</div></div>
+    </div>
+    <div style="text-align:center;margin-top:36px">
+      <button class="btn-primary" onclick="showPage('booking')">Забронировать стол</button>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border-top:none">© 2026 La Maison</div></footer>
+</div>
+
+<!-- ══════════════ CONTACTS ══════════════ -->
+<div class="page" id="page-contacts">
+  <div class="section" style="padding-top:48px">
+    <div class="sec-label">Мы здесь</div>
+    <h2 class="sec-title">Как нас <em>найти</em></h2>
+    <div class="contacts-grid">
+      <div>
+        <div class="contact-block">
+          <div class="contact-title">📍 Адрес и контакты</div>
+          <div class="contact-row"><div class="contact-icon">📍</div><div class="contact-val">ул. Баумана, 44, Казань<span>Центральный район, рядом с Кремлём</span></div></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><div class="contact-val">+7 (843) 555-12-34<span>Ежедневно с 10:00 до 23:00</span></div></div>
+          <div class="contact-row"><div class="contact-icon">✉️</div><div class="contact-val">info@lamaison.ru<span>Ответ в течение 2 часов</span></div></div>
+          <div class="contact-row"><div class="contact-icon">📱</div><div class="contact-val">@lamaison_kazan<span>Instagram, ВКонтакте, Telegram</span></div></div>
+        </div>
+        <div class="contact-block" style="margin-top:16px">
+          <div class="contact-title">⏰ Часы работы</div>
+          <div class="contact-row"><div class="contact-val">Понедельник — Четверг<span>12:00 – 23:00</span></div></div>
+          <div class="contact-row"><div class="contact-val">Пятница — Суббота<span>12:00 – 00:00</span></div></div>
+          <div class="contact-row"><div class="contact-val">Воскресенье<span>12:00 – 22:00</span></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="map-placeholder">🗺️<p>ул. Баумана, 44, Казань</p></div>
+        <div class="contact-block" style="margin-top:16px">
+          <div class="contact-title">🚗 Как добраться</div>
+          <div class="contact-row"><div class="contact-icon">🚇</div><div class="contact-val">Метро «Кремлёвская»<span>5 минут пешком</span></div></div>
+          <div class="contact-row"><div class="contact-icon">🚌</div><div class="contact-val">Автобусы 15, 35, 74<span>Остановка «ул. Баумана»</span></div></div>
+          <div class="contact-row"><div class="contact-icon">🅿️</div><div class="contact-val">Парковка<span>Рядом платная парковка, 100 м</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px">
+      <button class="btn-primary" onclick="showPage('booking')">Забронировать стол</button>
+    </div>
+  </div>
+  <footer><div class="footer-bottom" style="border-top:none">© 2026 La Maison</div></footer>
+</div>
+
+<!-- ══════════════ BOOKING ══════════════ -->
+<div class="page" id="page-booking">
+  <div class="booking-wrap">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:11px;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-bottom:8px">Онлайн-бронирование</div>
+      <h2 style="font-size:28px;color:var(--text);font-family:Georgia,serif">Забронировать <em style="color:var(--gold);font-style:italic">стол</em></h2>
+    </div>
+
+    <div class="stepper" id="stepper">
+      <div class="step active" id="st1"><div class="step-num">1</div><div class="step-lbl">Дата<br>и время</div></div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step" id="st2"><div class="step-num">2</div><div class="step-lbl">Выбор<br>стола</div></div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step" id="st3"><div class="step-num">3</div><div class="step-lbl">Ваши<br>данные</div></div>
+      <div class="step-line" id="sl3"></div>
+      <div class="step" id="st4"><div class="step-num">4</div><div class="step-lbl">Подтверж-<br>дение</div></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="bstep1">
+      <div class="bcard">
+        <div class="bcard-title">📅 Параметры визита</div>
+        <div class="bcard-sub">Укажите дату, время и количество гостей — мы покажем доступные столы</div>
+        <div class="fgrid">
+          <div class="fld"><label>Дата посещения</label><input type="date" id="r-date"/></div>
+          <div class="fld"><label>Время начала</label><input type="time" id="r-time" value="19:00" min="12:00" max="22:30"/></div>
+          <div class="fld"><label>Продолжительность</label>
+            <select id="r-dur">
+              <option value="60">1 час</option>
+              <option value="90">1 час 30 мин</option>
+              <option value="120" selected>2 часа</option>
+              <option value="180">3 часа</option>
+              <option value="240">4 часа</option>
+            </select>
+          </div>
+          <div class="fld"><label>Количество гостей</label>
+            <input type="number" id="r-guests" value="2" min="1" max="20"/>
+            <span class="fld-hint">Включая вас</span>
+          </div>
+        </div>
+        <div class="btns"><button class="btn btng" id="btn-find">Найти столы →</button></div>
+        <div class="msg" id="msg1"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="bstep2" style="display:none">
+      <div class="bcard" style="padding:0;overflow:hidden">
+        <div style="padding:24px 28px 16px">
+          <div class="bcard-title">🏛️ Схема зала</div>
+          <div class="bcard-sub" id="step2-sub">Выберите стол — нажмите на свободный (зелёный)</div>
+        </div>
+
+        <div class="sel-banner" id="sel-banner" style="margin:0 28px 16px">
+          <div class="sel-banner-title" id="sel-title">—</div>
+          <div class="sel-banner-sub" id="sel-sub">—</div>
+        </div>
+
+        <!-- HALL LEGEND -->
+        <div style="padding:0 28px 12px">
+          <div class="hall-legend">
+            <div class="leg"><div class="ldot" style="background:#22c55e"></div>Свободен</div>
+            <div class="leg"><div class="ldot" style="background:#ef4444"></div>Занят</div>
+            <div class="leg"><div class="ldot" style="background:#3b82f6"></div>Выбран</div>
+            <div class="leg" style="margin-left:auto;font-size:11px;color:var(--text3)">Наведите на стол для инфо</div>
+          </div>
+        </div>
+
+        <!-- HALL SVG -->
+        <div class="hall-container" style="margin:0 28px 20px">
+          <div class="hall-svg-wrap">
+            <svg id="hall-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+              <!-- Стены ресторана -->
+              <rect x="0" y="0" width="800" height="500" fill="#06080e" rx="8"/>
+              <!-- Вход -->
+              <rect x="340" y="482" width="120" height="18" fill="#1a2438" rx="4"/>
+              <text x="400" y="494" text-anchor="middle" fill="#4a5568" font-size="10" font-family="sans-serif">ВХОД</text>
+
+              <!-- ═══ ОСНОВНОЙ ЗАЛ ═══ -->
+              <rect x="12" y="12" width="490" height="290" fill="#080d18" rx="8" stroke="rgba(34,197,94,.15)" stroke-width="1.5"/>
+              <text x="26" y="30" fill="rgba(34,197,94,.5)" font-size="9" font-family="sans-serif" letter-spacing="2">ОСНОВНОЙ ЗАЛ</text>
+              <!-- Сцена / бар -->
+              <rect x="20" y="38" width="100" height="50" fill="#0d1420" rx="6" stroke="rgba(201,168,76,.2)" stroke-width="1"/>
+              <text x="70" y="61" text-anchor="middle" fill="rgba(201,168,76,.5)" font-size="9" font-family="sans-serif">БАР</text>
+              <text x="70" y="74" text-anchor="middle" fill="rgba(201,168,76,.3)" font-size="8" font-family="sans-serif">🍷</text>
+              <!-- Столы основного зала будут нарисованы JS -->
+              <g id="zone-main-svg"></g>
+
+              <!-- ═══ ТЕРРАСА ═══ -->
+              <rect x="514" y="12" width="274" height="290" fill="#06100e" rx="8" stroke="rgba(20,184,166,.15)" stroke-width="1.5"/>
+              <text x="528" y="30" fill="rgba(20,184,166,.5)" font-size="9" font-family="sans-serif" letter-spacing="2">ТЕРРАСА</text>
+              <!-- Окна -->
+              <rect x="520" y="38" width="260" height="12" fill="#0a1e1c" rx="3" stroke="rgba(20,184,166,.15)" stroke-width="1"/>
+              <text x="650" y="48" text-anchor="middle" fill="rgba(20,184,166,.35)" font-size="8" font-family="sans-serif">— ПАНОРАМНЫЕ ОКНА —</text>
+              <g id="zone-terrace-svg"></g>
+
+              <!-- ═══ VIP ЗАЛ ═══ -->
+              <rect x="12" y="314" width="776" height="170" fill="#0d0814" rx="8" stroke="rgba(168,85,247,.2)" stroke-width="1.5"/>
+              <text x="26" y="332" fill="rgba(168,85,247,.6)" font-size="9" font-family="sans-serif" letter-spacing="2">VIP — ПРИВАТНЫЙ ЗАЛ</text>
+              <!-- Занавес -->
+              <rect x="20" y="340" width="8" height="136" fill="rgba(168,85,247,.15)" rx="4"/>
+              <rect x="772" y="340" width="8" height="136" fill="rgba(168,85,247,.15)" rx="4"/>
+              <text x="400" y="340" text-anchor="middle" fill="rgba(168,85,247,.2)" font-size="9" font-family="sans-serif">✦ ─────────────────── ✦</text>
+              <g id="zone-vip-svg"></g>
+            </svg>
+          </div>
+        </div>
+
+        <div style="padding:0 28px 24px">
+          <div class="btns">
+            <button class="btn btno" id="btn-back1">← Изменить дату</button>
+            <button class="btn btng" id="btn-next2" disabled>Продолжить →</button>
+          </div>
+          <div class="msg" id="msg2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="bstep3" style="display:none">
+      <div class="bcard">
+        <div class="bcard-title">👤 Контактные данные</div>
+        <div class="bcard-sub">Введите email — если вы бронировали у нас раньше, данные заполнятся автоматически</div>
+        <div class="fgrid">
+          <div class="fld full"><label>Электронная почта *</label>
+            <input type="email" id="f-email" placeholder="mail@example.com" autocomplete="email"/>
+            <span class="fld-hint" id="email-hint" style="color:#4ade80"></span>
+          </div>
+          <div class="fld"><label>Фамилия и имя *</label>
+            <input type="text" id="f-name" placeholder="Иванова Мария Сергеевна" autocomplete="name"/></div>
+          <div class="fld"><label>Номер телефона *</label>
+            <input type="tel" id="f-phone" placeholder="+7 900 000-00-00" autocomplete="tel"/></div>
+          <div class="fld full"><label>Особые пожелания</label>
+            <textarea id="f-req" placeholder="Аллергия, детский стул, украшение стола, живая музыка, день рождения…"></textarea>
+            <span class="fld-hint">Необязательно — постараемся учесть все пожелания</span>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn btno" id="btn-back2">← Выбрать другой стол</button>
+          <button class="btn btng" id="btn-next3">Далее →</button>
+        </div>
+        <div class="msg" id="msg3"></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="bstep4" style="display:none">
+      <div class="bcard">
+        <div class="bcard-title">✅ Подтверждение</div>
+        <div class="bcard-sub">Проверьте данные перед отправкой</div>
+        <div class="conf-block">
+          <div class="conf-block-hdr">🪑 Стол и время</div>
+          <div class="conf-row"><span class="conf-k">Стол</span><span class="conf-v" id="c-table">—</span></div>
+          <div class="conf-row"><span class="conf-k">Зона</span><span class="conf-v" id="c-zone">—</span></div>
+          <div class="conf-row"><span class="conf-k">Вместимость</span><span class="conf-v" id="c-seats">—</span></div>
+          <div class="conf-row"><span class="conf-k">Дата</span><span class="conf-v" id="c-date">—</span></div>
+          <div class="conf-row"><span class="conf-k">Время</span><span class="conf-v" id="c-time">—</span></div>
+          <div class="conf-row"><span class="conf-k">Продолжительность</span><span class="conf-v" id="c-dur">—</span></div>
+          <div class="conf-row"><span class="conf-k">Гостей</span><span class="conf-v" id="c-guests">—</span></div>
+        </div>
+        <div class="conf-block">
+          <div class="conf-block-hdr">👤 Данные гостя</div>
+          <div class="conf-row"><span class="conf-k">Имя</span><span class="conf-v" id="c-name">—</span></div>
+          <div class="conf-row"><span class="conf-k">Телефон</span><span class="conf-v" id="c-phone">—</span></div>
+          <div class="conf-row"><span class="conf-k">E-mail</span><span class="conf-v" id="c-email">—</span></div>
+          <div class="conf-row" id="c-req-row" style="display:none">
+            <span class="conf-k">Пожелания</span><span class="conf-v" id="c-req">—</span>
+          </div>
+        </div>
+        <div style="background:rgba(201,168,76,.06);border:1px solid var(--border);border-radius:8px;
+          padding:14px 16px;font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6">
+          📌 После подтверждения администратор свяжется с вами по телефону или email для уточнения деталей.
+        </div>
+        <div class="btns">
+          <button class="btn btno" id="btn-back3">← Изменить данные</button>
+          <button class="btn btng" id="btn-submit">Подтвердить бронирование ✓</button>
+        </div>
+        <div class="msg" id="msg4"></div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="bstep-ok" style="display:none">
+      <div class="bcard success-card">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Бронирование подтверждено!</div>
+        <div class="success-num" id="success-num">Бронь №—</div>
+        <div class="success-sub">Ваша заявка принята. Администратор свяжется с вами в течение 30 минут для подтверждения. Ждём вас в La Maison!</div>
+        <div class="btns" style="justify-content:center;gap:14px">
+          <button class="btn btno" onclick="showPage('home')">На главную</button>
+          <button class="btn btng" id="btn-new">Новое бронирование</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script>
 if(typeof API_URL==='undefined') var API_URL='';
 
-/* ═══ STATE ═══ */
-var state = {
-  date:'', time:'', duration:120, guests:2,
-  tableId:null, tableName:'', zoneColor:'',
+/* ── NAV ── */
+var currentPage='home';
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('nav a[data-page]').forEach(function(a){
+    a.classList.toggle('active', a.dataset.page===p);
+  });
+  var el=document.getElementById('page-'+p);
+  if(el){el.classList.add('active');window.scrollTo(0,0);}
+  currentPage=p;
+  document.getElementById('main-nav').classList.remove('open');
+  if(p==='booking' && bookingState.step===1) initDate();
+  return false;
+}
+document.querySelectorAll('nav a').forEach(function(a){
+  a.addEventListener('click',function(e){e.preventDefault();});
+});
+document.getElementById('burger').addEventListener('click',function(){
+  document.getElementById('main-nav').classList.toggle('open');
+});
+
+/* ── PARTICLES ── */
+(function(){
+  var p=document.getElementById('particles');
+  if(!p) return;
+  for(var i=0;i<18;i++){
+    var d=document.createElement('div');
+    d.className='particle';
+    d.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(6+Math.random()*10)+'s;animation-delay:'+(-Math.random()*12)+'s';
+    p.appendChild(d);
+  }
+})();
+
+/* ── BOOKING STATE ── */
+var bookingState={
+  step:1, date:'', time:'', duration:120, guests:2,
+  tableId:null, tableNum:0, zoneName:'', seats:0,
   name:'', phone:'', email:'', request:'',
   tables:[]
 };
 
-/* ═══ INIT ═══ */
-var di = document.getElementById('r-date');
-di.value = new Date().toISOString().split('T')[0];
-di.min   = di.value;
-
-/* ═══ API ═══ */
-function api(path, opts) {
-  return fetch(API_URL + path, Object.assign({
-    credentials:'include',
-    headers:{'Content-Type':'application/json'}
-  }, opts||{})).then(function(r){return r.json();});
+function initDate(){
+  var di=document.getElementById('r-date');
+  if(!di.value){
+    di.value=new Date().toISOString().split('T')[0];
+    di.min=di.value;
+  }
 }
+initDate();
 
-/* ═══ STEPPER ═══ */
-function setStep(n) {
+/* ── STEPPER ── */
+function setStep(n){
+  bookingState.step=n;
   [1,2,3,4].forEach(function(i){
-    var s = document.getElementById('st'+i);
+    var s=document.getElementById('st'+i);
     s.classList.remove('active','done');
-    if(i < n)  s.classList.add('done');
-    if(i === n) s.classList.add('active');
+    if(i<n)  s.classList.add('done');
+    if(i===n) s.classList.add('active');
+    var l=document.getElementById('sl'+i);
+    if(l) l.classList.toggle('done',i<n);
   });
-  [1,2,3].forEach(function(i){
-    var l = document.getElementById('sl'+i);
-    l.classList.toggle('done', i < n);
-  });
-  ['step1','step2','step3','step4','step-success'].forEach(function(id){
+  ['bstep1','bstep2','bstep3','bstep4','bstep-ok'].forEach(function(id){
     document.getElementById(id).style.display='none';
   });
-  var stepEl = document.getElementById('step'+n) || document.getElementById('step-success');
-  if(stepEl) {
-    stepEl.style.display='block';
-    setTimeout(function(){ stepEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
-  }
+  var target=n===5?'bstep-ok':'bstep'+n;
+  var el=document.getElementById(target);
+  if(el){el.style.display='block';setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},60);}
 }
 
-function showSuccess() {
-  ['step1','step2','step3','step4'].forEach(function(id){
-    document.getElementById(id).style.display='none';
-  });
-  [1,2,3,4].forEach(function(i){ document.getElementById('st'+i).classList.add('done'); });
-  document.getElementById('step-success').style.display='block';
+/* ── MSG ── */
+function showMsg(id,text,cls){
+  var m=document.getElementById(id);
+  m.textContent=text;m.className='msg '+cls;m.style.display='block';
 }
+function hideMsg(id){document.getElementById(id).style.display='none';}
 
-/* ═══ MSG ═══ */
-function showMsg(id, text, cls) {
-  var m = document.getElementById(id);
-  m.textContent = text; m.className = 'msg '+cls; m.style.display = 'block';
-}
-function hideMsg(id) { document.getElementById(id).style.display='none'; }
-
-/* ═══ ШАГ 1 → 2 ═══ */
-document.getElementById('btn-find').addEventListener('click', function() {
+/* ── STEP 1 → 2 ── */
+document.getElementById('btn-find').addEventListener('click',function(){
   hideMsg('msg1');
-  var date  = document.getElementById('r-date').value;
-  var time  = document.getElementById('r-time').value;
-  var dur   = document.getElementById('r-dur').value;
-  var guest = document.getElementById('r-guests').value;
-  if(!date||!time) { showMsg('msg1','Укажите дату и время','err'); return; }
-  if(parseInt(guest)<1) { showMsg('msg1','Укажите количество гостей','err'); return; }
-  state.date = date; state.time = time;
-  state.duration = parseInt(dur); state.guests = parseInt(guest);
-
-  var btn = this; btn.disabled=true; btn.textContent='Загрузка…';
-  api('/api/tables?date='+date+'&time='+time+'&duration='+dur).then(function(d){
-    btn.disabled=false; btn.textContent='Показать доступные столы →';
-    if(!d.success){ showMsg('msg1','Ошибка загрузки. Попробуйте ещё раз.','err'); return; }
-    state.tables = d.tables;
-    renderHall(d.tables);
+  var date=document.getElementById('r-date').value;
+  var time=document.getElementById('r-time').value;
+  var dur=document.getElementById('r-dur').value;
+  var guests=document.getElementById('r-guests').value;
+  if(!date||!time){showMsg('msg1','Укажите дату и время посещения','err');return;}
+  if(parseInt(guests)<1){showMsg('msg1','Укажите количество гостей','err');return;}
+  bookingState.date=date;bookingState.time=time;
+  bookingState.duration=parseInt(dur);bookingState.guests=parseInt(guests);
+  var btn=this;btn.disabled=true;btn.textContent='Загрузка…';
+  fetch(API_URL+'/api/tables?date='+date+'&time='+time+'&duration='+dur,{credentials:'include'})
+  .then(function(r){return r.json();}).then(function(d){
+    btn.disabled=false;btn.textContent='Найти столы →';
+    if(!d.success){showMsg('msg1','Ошибка. Попробуйте ещё раз.','err');return;}
+    bookingState.tables=d.tables;
+    var ds=date.split('-');
+    document.getElementById('step2-sub').textContent=
+      ds[2]+'.'+ds[1]+'.'+ds[0]+' · '+time+' · '+dur+' мин · '+guests+' гост. — нажмите на свободный стол';
+    renderSVGHall(d.tables);
     setStep(2);
-    var sub = document.getElementById('step2-sub');
-    var ds = date.split('-'); var dateStr = ds[2]+'.'+ds[1]+'.'+ds[0];
-    sub.textContent = dateStr+' · '+time+' · '+dur+' мин · '+guest+' гост. — нажмите на свободный стол';
   }).catch(function(){
-    btn.disabled=false; btn.textContent='Показать доступные столы →';
-    showMsg('msg1','Сетевая ошибка. Проверьте подключение.','err');
+    btn.disabled=false;btn.textContent='Найти столы →';
+    showMsg('msg1','Сетевая ошибка','err');
   });
 });
 
-/* ═══ RENDER HALL ═══ */
-function renderHall(tables) {
-  var zones = {main:[], terrace:[], vip:[]};
-  tables.forEach(function(t){
-    var zn = t.zone_name||'';
-    if(zn.toLowerCase().indexOf('vip')!==-1 || zn.toLowerCase().indexOf('вип')!==-1) zones.vip.push(t);
-    else if(zn.toLowerCase().indexOf('терр')!==-1) zones.terrace.push(t);
-    else zones.main.push(t);
-  });
-  renderZone('zone-main',    zones.main,    '#22c55e');
-  renderZone('zone-terrace', zones.terrace, '#14b8a6');
-  renderZone('zone-vip',     zones.vip,     '#a855f7');
-}
+/* ── SVG HALL RENDER ── */
+/* Позиции столов в SVG viewBox 800x500 */
+var TABLE_POSITIONS = {
+  // Основной зал (x12-502, y12-302)
+  // Ряд 1: столы 1-4
+  1:  {x:150,y:90,  shape:'round', cx:150,cy:90},
+  2:  {x:230,y:90,  shape:'round', cx:230,cy:90},
+  3:  {x:320,y:85,  shape:'rect',  cx:320,cy:85},
+  4:  {x:430,y:85,  shape:'rect',  cx:430,cy:85},
+  // Ряд 2: столы 5-7
+  5:  {x:150,y:190, shape:'round', cx:150,cy:190},
+  6:  {x:250,y:190, shape:'rect',  cx:250,cy:190},
+  7:  {x:390,y:190, shape:'rect',  cx:390,cy:190},
+  // Ряд 3 (у стены): стол 8
+  8:  {x:300,y:270, shape:'round', cx:300,cy:270},
 
-function renderZone(containerId, tables, accentColor) {
-  var cont = document.getElementById(containerId);
-  cont.innerHTML = '';
-  if(!tables.length){
-    cont.innerHTML='<div style="color:rgba(255,255,255,.25);font-size:13px">Нет столов в этой зоне</div>';
-    return;
-  }
+  // Терраса (x514-788, y12-302)
+  9:  {x:590,y:100, shape:'round', cx:590,cy:100},
+  10: {x:720,y:100, shape:'round', cx:720,cy:100},
+  11: {x:650,y:210, shape:'rect',  cx:650,cy:210},
+
+  // VIP зал (x12-788, y314-484)
+  12: {x:120,y:395, shape:'rect',  cx:120,cy:395},
+  // стол 8 уже есть выше, остальные VIP
+};
+
+/* Размеры по вместимости */
+function tSize(seats){return seats<=2?26:seats<=4?32:seats<=6?38:44;}
+
+function renderSVGHall(tables){
+  var mainG   =document.getElementById('zone-main-svg');
+  var terraceG=document.getElementById('zone-terrace-svg');
+  var vipG    =document.getElementById('zone-vip-svg');
+  mainG.innerHTML='';terraceG.innerHTML='';vipG.innerHTML='';
+
   tables.forEach(function(t){
-    var seats = t.seats_count;
-    var w = seats<=2?64:seats<=4?76:seats<=6?88:100;
-    var busy = !t.available;
-    var isSel = t.table_id === state.tableId;
-    var el = document.createElement('div');
-    el.className = 't '+(t.shape==='round'?'round':'rect')+' '+(isSel?'sel':busy?'busy':'free');
-    el.style.width = w+'px'; el.style.height = w+'px';
-    el.innerHTML =
-      '<div class="t-inner">'+
-        '<span class="tn">'+t.table_number+'</span>'+
-        '<span class="tc">'+seats+' мест</span>'+
-      '</div>'+
-      '<div class="tip">'+
-        'Стол №'+t.table_number+'<br>'+
-        esc(t.zone_name)+' · '+seats+' мест<br>'+
-        (busy?'<span style="color:#f87171">Занят</span>':'<span style="color:#4ade80">Свободен</span>')+
-      '</div>';
-    if(!busy) {
-      (function(tbl){ el.addEventListener('click', function(){ selectTable(tbl); }); })(t);
+    var pos=TABLE_POSITIONS[t.table_number];
+    if(!pos) return;
+    var r=tSize(t.seats_count);
+    var busy=!t.available, isSel=t.table_id===bookingState.tableId;
+    var fill=isSel?'#1d4ed8':busy?'#991b1b':'#15803d';
+    var stroke=isSel?'#60a5fa':busy?'#ef4444':'#22c55e';
+    var glow=isSel?'drop-shadow(0 0 8px #3b82f6)':busy?'none':'drop-shadow(0 0 6px rgba(34,197,94,.4))';
+    var zone=t.zone_name||'';
+    var isVip=zone.toLowerCase().indexOf('vip')!==-1||zone.toLowerCase().indexOf('вип')!==-1;
+    var isTerrace=zone.toLowerCase().indexOf('терр')!==-1;
+    var g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor=busy?'not-allowed':'pointer';
+    g.style.filter=glow;
+    var shape;
+    if(t.shape==='round'){
+      shape=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      shape.setAttribute('cx',pos.cx);shape.setAttribute('cy',pos.cy);shape.setAttribute('r',r);
+    } else {
+      shape=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      shape.setAttribute('x',pos.cx-r);shape.setAttribute('y',pos.cy-r*0.65);
+      shape.setAttribute('width',r*2);shape.setAttribute('height',r*1.3);
+      shape.setAttribute('rx','5');
     }
-    cont.appendChild(el);
+    shape.setAttribute('fill',fill);shape.setAttribute('stroke',stroke);shape.setAttribute('stroke-width','2');
+    if(isSel){shape.setAttribute('fill-opacity','0.9');}
+    var num=document.createElementNS('http://www.w3.org/2000/svg','text');
+    num.setAttribute('x',pos.cx);num.setAttribute('y',pos.cy);
+    num.setAttribute('text-anchor','middle');num.setAttribute('dominant-baseline','middle');
+    num.setAttribute('fill','#fff');num.setAttribute('font-size',r>30?'12':'10');
+    num.setAttribute('font-weight','bold');num.setAttribute('font-family','sans-serif');
+    num.textContent=t.table_number;
+    var seats=document.createElementNS('http://www.w3.org/2000/svg','text');
+    seats.setAttribute('x',pos.cx);seats.setAttribute('y',pos.cy+(r>30?14:12));
+    seats.setAttribute('text-anchor','middle');seats.setAttribute('dominant-baseline','middle');
+    seats.setAttribute('fill','rgba(255,255,255,.65)');seats.setAttribute('font-size','8');
+    seats.setAttribute('font-family','sans-serif');seats.textContent=t.seats_count+'м';
+    /* Tooltip title */
+    var title=document.createElementNS('http://www.w3.org/2000/svg','title');
+    title.textContent='Стол №'+t.table_number+' · '+zone+' · '+t.seats_count+' мест · '+(busy?'Занят':'Свободен');
+    g.appendChild(title);g.appendChild(shape);g.appendChild(num);g.appendChild(seats);
+    /* Pulse animation for selected */
+    if(isSel){
+      var pulse=document.createElementNS('http://www.w3.org/2000/svg','animate');
+      pulse.setAttribute('attributeName','stroke-opacity');
+      pulse.setAttribute('values','1;0.3;1');pulse.setAttribute('dur','1.2s');
+      pulse.setAttribute('repeatCount','indefinite');
+      shape.appendChild(pulse);
+    }
+    if(!busy){
+      (function(tbl){g.addEventListener('click',function(){selectSVGTable(tbl);});})(t);
+      g.addEventListener('mouseenter',function(){if(!isSel)shape.setAttribute('fill-opacity','0.8');});
+      g.addEventListener('mouseleave',function(){if(!isSel)shape.setAttribute('fill-opacity','1');});
+    }
+    if(isVip) vipG.appendChild(g);
+    else if(isTerrace) terraceG.appendChild(g);
+    else mainG.appendChild(g);
   });
 }
 
-function selectTable(t) {
-  state.tableId = t.table_id;
-  renderHall(state.tables);
-  var si = document.getElementById('sel-info');
-  si.style.display = 'block';
-  document.getElementById('sel-name').textContent = 'Выбран: Стол №'+t.table_number+' · '+t.zone_name;
-  var ds = state.date.split('-');
-  document.getElementById('sel-details').innerHTML =
-    'Вместимость: до '+t.seats_count+' гостей &nbsp;·&nbsp; '+
-    ds[2]+'.'+ds[1]+'.'+ds[0]+' в '+state.time+' &nbsp;·&nbsp; '+state.duration+' мин';
-  document.getElementById('btn-next2').disabled = false;
+function selectSVGTable(t){
+  bookingState.tableId=t.table_id;
+  bookingState.tableNum=t.table_number;
+  bookingState.zoneName=t.zone_name;
+  bookingState.seats=t.seats_count;
+  renderSVGHall(bookingState.tables);
+  var banner=document.getElementById('sel-banner');
+  banner.style.display='block';
+  document.getElementById('sel-title').textContent='✓ Выбран Стол №'+t.table_number+' · '+t.zone_name;
+  var ds=bookingState.date.split('-');
+  document.getElementById('sel-sub').innerHTML=
+    'Вместимость: <b>до '+t.seats_count+' гостей</b> &nbsp;·&nbsp; '+
+    'Дата: <b>'+ds[2]+'.'+ds[1]+'.'+ds[0]+'</b> &nbsp;·&nbsp; '+
+    'Время: <b>'+bookingState.time+'</b>';
+  document.getElementById('btn-next2').disabled=false;
 }
 
-/* ═══ ШАГ 2 навигация ═══ */
-document.getElementById('btn-back1').addEventListener('click', function(){
-  state.tableId=null; setStep(1);
+document.getElementById('btn-back1').addEventListener('click',function(){
+  bookingState.tableId=null;setStep(1);
+});
+document.getElementById('btn-next2').addEventListener('click',function(){
+  if(!bookingState.tableId){showMsg('msg2','Выберите стол на схеме','err');return;}
+  hideMsg('msg2');setStep(3);
 });
 
-document.getElementById('btn-next2').addEventListener('click', function(){
-  if(!state.tableId){ showMsg('msg2','Выберите стол на схеме зала','err'); return; }
-  hideMsg('msg2'); setStep(3);
-});
-
-/* ═══ Email lookup — автозаполнение ═══ */
-var emailTimer;
-document.getElementById('f-email').addEventListener('input', function(){
-  clearTimeout(emailTimer);
-  var email = this.value.trim();
-  var hint = document.getElementById('email-hint');
-  if(!email||email.indexOf('@')===-1){ hint.textContent=''; return; }
-  emailTimer = setTimeout(function(){
-    api('/api/customer-lookup?email='+encodeURIComponent(email)).then(function(d){
-      if(d.success && d.customer){
-        document.getElementById('f-name').value  = d.customer.full_name||'';
-        document.getElementById('f-phone').value = d.customer.phone||'';
-        hint.textContent = '✓ Данные подставлены из предыдущего бронирования';
-        hint.style.color = '#4ade80';
-      } else {
-        hint.textContent = '';
-      }
+/* ── Email autofill ── */
+var emailT;
+document.getElementById('f-email').addEventListener('input',function(){
+  clearTimeout(emailT);
+  var email=this.value.trim();
+  var hint=document.getElementById('email-hint');
+  if(!email||email.indexOf('@')===-1){hint.textContent='';return;}
+  emailT=setTimeout(function(){
+    fetch(API_URL+'/api/customer-lookup?email='+encodeURIComponent(email),{credentials:'include'})
+    .then(function(r){return r.json();}).then(function(d){
+      if(d.success&&d.customer){
+        document.getElementById('f-name').value=d.customer.full_name||'';
+        document.getElementById('f-phone').value=d.customer.phone||'';
+        hint.textContent='✓ Данные заполнены из предыдущего визита';
+        hint.style.color='#4ade80';
+      } else hint.textContent='';
     }).catch(function(){});
-  }, 600);
+  },600);
 });
 
-/* ═══ ШАГ 3 → 4 ═══ */
-document.getElementById('btn-back2').addEventListener('click', function(){ setStep(2); });
-
-document.getElementById('btn-next3').addEventListener('click', function(){
+/* ── STEP 3 → 4 ── */
+document.getElementById('btn-back2').addEventListener('click',function(){setStep(2);});
+document.getElementById('btn-next3').addEventListener('click',function(){
   hideMsg('msg3');
-  var name  = document.getElementById('f-name').value.trim();
-  var phone = document.getElementById('f-phone').value.trim();
-  var email = document.getElementById('f-email').value.trim();
-  var req   = document.getElementById('f-req').value.trim();
-  if(!name)  { showMsg('msg3','Введите фамилию и имя','err'); return; }
-  if(!phone) { showMsg('msg3','Введите номер телефона','err'); return; }
-  if(!email) { showMsg('msg3','Введите адрес электронной почты','err'); return; }
-  if(email.indexOf('@')===-1){ showMsg('msg3','Введите корректный email','err'); return; }
-
-  state.name=name; state.phone=phone; state.email=email; state.request=req;
-
-  // Заполняем экран подтверждения
-  var tbl = state.tables.filter(function(t){return t.table_id===state.tableId;})[0]||{};
-  var ds  = state.date.split('-');
-  var durMap = {60:'1 час',90:'1 час 30 минут',120:'2 часа',180:'3 часа',240:'4 часа'};
-
-  document.getElementById('c-table').textContent  = 'Стол №'+tbl.table_number;
-  document.getElementById('c-zone').textContent   = tbl.zone_name||'—';
-  document.getElementById('c-seats').textContent  = 'до '+(tbl.seats_count||'?')+' гостей';
-  document.getElementById('c-date').textContent   = ds.length===3?ds[2]+'.'+ds[1]+'.'+ds[0]:state.date;
-  document.getElementById('c-time').textContent   = state.time;
-  document.getElementById('c-dur').textContent    = durMap[state.duration]||state.duration+' мин';
-  document.getElementById('c-guests').textContent = state.guests+' чел.';
-  document.getElementById('c-name').textContent   = name;
-  document.getElementById('c-phone').textContent  = phone;
-  document.getElementById('c-email').textContent  = email;
-  if(req){
-    document.getElementById('c-req').textContent = req;
-    document.getElementById('c-req-row').style.display='flex';
-  } else {
-    document.getElementById('c-req-row').style.display='none';
-  }
+  var name=document.getElementById('f-name').value.trim();
+  var phone=document.getElementById('f-phone').value.trim();
+  var email=document.getElementById('f-email').value.trim();
+  var req=document.getElementById('f-req').value.trim();
+  if(!name){showMsg('msg3','Введите фамилию и имя','err');return;}
+  if(!phone){showMsg('msg3','Введите номер телефона','err');return;}
+  if(!email||email.indexOf('@')===-1){showMsg('msg3','Введите корректный email','err');return;}
+  bookingState.name=name;bookingState.phone=phone;
+  bookingState.email=email;bookingState.request=req;
+  var tbl=bookingState.tables.filter(function(t){return t.table_id===bookingState.tableId;})[0]||{};
+  var ds=bookingState.date.split('-');
+  var durMap={'60':'1 час','90':'1 ч 30 мин','120':'2 часа','180':'3 часа','240':'4 часа'};
+  document.getElementById('c-table').textContent='Стол №'+tbl.table_number;
+  document.getElementById('c-zone').textContent=tbl.zone_name||'—';
+  document.getElementById('c-seats').textContent='до '+(tbl.seats_count||'?')+' гостей';
+  document.getElementById('c-date').textContent=ds.length===3?ds[2]+'.'+ds[1]+'.'+ds[0]:bookingState.date;
+  document.getElementById('c-time').textContent=bookingState.time;
+  document.getElementById('c-dur').textContent=durMap[String(bookingState.duration)]||bookingState.duration+' мин';
+  document.getElementById('c-guests').textContent=bookingState.guests+' чел.';
+  document.getElementById('c-name').textContent=name;
+  document.getElementById('c-phone').textContent=phone;
+  document.getElementById('c-email').textContent=email;
+  if(req){document.getElementById('c-req').textContent=req;document.getElementById('c-req-row').style.display='flex';}
+  else document.getElementById('c-req-row').style.display='none';
   setStep(4);
 });
 
-/* ═══ ШАГ 4 → SUBMIT ═══ */
-document.getElementById('btn-back3').addEventListener('click', function(){ setStep(3); });
-
-document.getElementById('btn-submit').addEventListener('click', function(){
+/* ── STEP 4 → SUBMIT ── */
+document.getElementById('btn-back3').addEventListener('click',function(){setStep(3);});
+document.getElementById('btn-submit').addEventListener('click',function(){
   hideMsg('msg4');
-  var btn = this; btn.disabled=true; btn.textContent='Отправка…';
-  var body = {
-    table_id        : state.tableId,
-    reservation_date: state.date,
-    reservation_time: state.time,
-    duration        : state.duration,
-    guests_count    : state.guests,
-    full_name       : state.name,
-    phone           : state.phone,
-    email           : state.email,
-    special_request : state.request
+  var btn=this;btn.disabled=true;btn.textContent='Отправка…';
+  var body={
+    table_id:bookingState.tableId,
+    reservation_date:bookingState.date,
+    reservation_time:bookingState.time,
+    duration:bookingState.duration,
+    guests_count:bookingState.guests,
+    full_name:bookingState.name,
+    phone:bookingState.phone,
+    email:bookingState.email,
+    special_request:bookingState.request
   };
-  api('/api/reservations',{method:'POST',body:JSON.stringify(body)}).then(function(d){
-    btn.disabled=false; btn.textContent='Подтвердить бронирование ✓';
+  fetch(API_URL+'/api/reservations',{method:'POST',credentials:'include',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+  .then(function(r){return r.json();}).then(function(d){
+    btn.disabled=false;btn.textContent='Подтвердить бронирование ✓';
     if(d.success){
-      document.getElementById('success-num').textContent = 'Бронь №'+d.reservation_id;
-      showSuccess();
-    } else {
-      showMsg('msg4', d.message||'Ошибка при создании брони', 'err');
-    }
+      document.getElementById('success-num').textContent='Бронь №'+d.reservation_id;
+      setStep(5);
+    } else showMsg('msg4',d.message||'Ошибка при создании брони','err');
   }).catch(function(){
-    btn.disabled=false; btn.textContent='Подтвердить бронирование ✓';
-    showMsg('msg4','Сетевая ошибка. Проверьте подключение.','err');
+    btn.disabled=false;btn.textContent='Подтвердить бронирование ✓';
+    showMsg('msg4','Сетевая ошибка','err');
   });
 });
 
-/* ═══ Новое бронирование ═══ */
-document.getElementById('btn-new').addEventListener('click', function(){
-  state = {date:'',time:'',duration:120,guests:2,
-    tableId:null,tableName:'',zoneColor:'',
+/* ── NEW BOOKING ── */
+document.getElementById('btn-new').addEventListener('click',function(){
+  bookingState={step:1,date:'',time:'',duration:120,guests:2,
+    tableId:null,tableNum:0,zoneName:'',seats:0,
     name:'',phone:'',email:'',request:'',tables:[]};
-  ['f-name','f-phone','f-email','f-req'].forEach(function(id){
-    document.getElementById(id).value='';
-  });
+  ['f-name','f-phone','f-email','f-req'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('email-hint').textContent='';
-  document.getElementById('step-success').style.display='none';
-  var di2 = document.getElementById('r-date');
-  di2.value = new Date().toISOString().split('T')[0];
+  document.getElementById('sel-banner').style.display='none';
+  document.getElementById('btn-next2').disabled=true;
+  initDate();
   setStep(1);
 });
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
 </body>
 </html>
