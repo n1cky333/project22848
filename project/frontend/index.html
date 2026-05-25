@@ -49,7 +49,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:300;
 .hero{position:relative;height:100vh;min-height:600px;
   display:flex;align-items:center;justify-content:center;
   text-align:center;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-image:url('https://picsum.photos/id/292/1600/900');
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0a0e1a 0%,#1a1025 30%,#0d1520 60%,#1a0e0a 100%);
   background-size:cover;background-position:center;
   filter:brightness(.35);}
 .hero-overlay{position:absolute;inset:0;
@@ -125,10 +125,10 @@ section{padding:90px 0}
   background:var(--d3)}
 .gal-item:first-child{grid-column:1/3;grid-row:1/2}
 @media(max-width:640px){.gal-item:first-child{grid-column:1/3}}
-.gal-img{width:100%;height:100%;object-fit:cover;display:block;
+.gal-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
   transition:transform .5s ease;min-height:200px}
-.gal-item:first-child .gal-img{min-height:320px}
-.gal-item:hover .gal-img{transform:scale(1.04)}
+.gal-item:first-child .gal-img{min-height:320px;}
+.gal-item:hover .gal-img{transform:scale(1.02)}
 .gal-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,17,23,.7) 0%,transparent 60%);
   opacity:0;transition:.3s;display:flex;align-items:flex-end;padding:16px}
 .gal-item:hover .gal-overlay{opacity:1}
@@ -371,7 +371,17 @@ footer{background:var(--d2);border-top:1px solid var(--border);padding:40px 0 24
   <div class="container">
     <div class="about-grid">
       <div class="about-img-wrap">
-        <img class="about-img" src="https://picsum.photos/id/431/800/600" alt="Интерьер ресторана La Maison"/>
+        <div class="about-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:linear-gradient(135deg,#0d1520,#1c1030,#120d0a);border-radius:12px;aspect-ratio:4/3;min-height:260px;">
+  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+    <circle cx="36" cy="36" r="35" stroke="rgba(201,168,76,.25)" stroke-width="1.5"/>
+    <path d="M22 48V30c0-2 1-3 3-3h22c2 0 3 1 3 3v18" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M18 48h36" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="36" cy="22" r="5" stroke="#c9a84c" stroke-width="1.5"/>
+    <path d="M28 38h4M40 38h4M28 44h4M40 44h4" stroke="rgba(201,168,76,.5)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M34 48v-6h4v6" stroke="rgba(201,168,76,.5)" stroke-width="1.5"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.5);font-size:13px;letter-spacing:2px;text-transform:uppercase">Интерьер ресторана</span>
+</div>
         <div class="about-img-accent">
           <div class="about-img-accent-num">#1</div>
           <div class="about-img-accent-txt">Ресторан по версии Kazan Food Guide 2024</div>
@@ -425,23 +435,48 @@ footer{background:var(--d2);border-top:1px solid var(--border);padding:40px 0 24
     </div>
     <div class="gallery-grid">
       <div class="gal-item" onclick="openLightbox(this)">
-        <img class="gal-img" src="https://picsum.photos/id/1060/1200/700" alt="Основной зал"/>
+        <div class="gal-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(160deg,#0d1520 0%,#1a2535 40%,#0d1520 100%);">
+  <svg width="56" height="56" viewBox="0 0 72 72" fill="none">
+    <path d="M20 52V32c0-1.5.7-2.5 2-3l14-8 14 8c1.3.5 2 1.5 2 3v20M16 52h40M36 22v6M26 42h6M42 42h6" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.45);font-size:11px;letter-spacing:2px;text-transform:uppercase">Основной зал</span>
+</div>
         <div class="gal-overlay"><span class="gal-label">Основной зал</span></div>
       </div>
       <div class="gal-item" onclick="openLightbox(this)">
-        <img class="gal-img" src="https://picsum.photos/id/292/600/400" alt="Вечерняя сервировка"/>
+        <div class="gal-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(160deg,#150e0a 0%,#241408 50%,#100a05 100%);">
+  <svg width="56" height="56" viewBox="0 0 72 72" fill="none">
+    <path d="M36 20v4M28 24l3 3M44 24l-3 3M24 36h24M26 36c0-5.5 4.5-10 10-10s10 4.5 10 10M30 52V36M42 52V36M26 52h20" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.45);font-size:11px;letter-spacing:2px;text-transform:uppercase">Вечерняя сервировка</span>
+</div>
         <div class="gal-overlay"><span class="gal-label">Вечерняя сервировка</span></div>
       </div>
       <div class="gal-item" onclick="openLightbox(this)">
-        <img class="gal-img" src="https://picsum.photos/id/431/600/400" alt="VIP-зал"/>
+        <div class="gal-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(160deg,#120820 0%,#1e0f35 50%,#0f0620 100%);">
+  <svg width="56" height="56" viewBox="0 0 72 72" fill="none">
+    <path d="M20 52V35l16-12 16 12v17M30 52v-8h12v8M28 35h4M40 35h4M28 42h4M40 42h4M36 23v6" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.45);font-size:11px;letter-spacing:2px;text-transform:uppercase">VIP-зал</span>
+</div>
         <div class="gal-overlay"><span class="gal-label">VIP-зал</span></div>
       </div>
       <div class="gal-item" onclick="openLightbox(this)">
-        <img class="gal-img" src="https://picsum.photos/id/999/600/400" alt="Авторские блюда"/>
+        <div class="gal-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(160deg,#0a1208 0%,#14201a 50%,#081008 100%);">
+  <svg width="56" height="56" viewBox="0 0 72 72" fill="none">
+    <path d="M36 48c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zM36 26v6l4 4M22 52h28" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.45);font-size:11px;letter-spacing:2px;text-transform:uppercase">Авторские блюда</span>
+</div>
         <div class="gal-overlay"><span class="gal-label">Авторские блюда</span></div>
       </div>
       <div class="gal-item" onclick="openLightbox(this)">
-        <img class="gal-img" src="https://picsum.photos/id/493/600/400" alt="Терраса"/>
+        <div class="gal-img" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(160deg,#080e14 0%,#0f1e2a 50%,#050c12 100%);">
+  <svg width="56" height="56" viewBox="0 0 72 72" fill="none">
+    <path d="M16 52h40M20 52V36M52 52V36M16 36h40M24 36V28M36 36V24M48 36V28M24 28h4M44 28h4M34 24h4" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span style="color:rgba(201,168,76,.45);font-size:11px;letter-spacing:2px;text-transform:uppercase">Терраса</span>
+</div>
         <div class="gal-overlay"><span class="gal-label">Терраса</span></div>
       </div>
     </div>
@@ -769,11 +804,27 @@ document.querySelectorAll('#nav a').forEach(function(a){
 
 /* ── LIGHTBOX ── */
 function openLightbox(el){
-  var img=el.querySelector('img');
-  document.getElementById('lightbox-img').src=img.src;
+  var label=el.querySelector('.gal-label');
+  var bg=el.querySelector('.gal-img');
+  var lbImg=document.getElementById('lightbox-img');
+  lbImg.style.display='none';
+  var lbDiv=document.getElementById('lightbox-div');
+  if(!lbDiv){
+    lbDiv=document.createElement('div');lbDiv.id='lightbox-div';
+    lbDiv.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;width:min(700px,90vw);height:min(500px,80vh);border-radius:12px;';
+    lbDiv.innerHTML=bg.outerHTML;
+    document.getElementById('lightbox').appendChild(lbDiv);
+  } else {
+    lbDiv.innerHTML=bg.outerHTML;lbDiv.style.display='flex';
+  }
+  lbDiv.style.background=bg.style.background||'#161b22';
   document.getElementById('lightbox').classList.add('open');
 }
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  var d=document.getElementById('lightbox-div');if(d)d.style.display='none';
+}
+
 
 /* ── STATE ── */
 var S={date:'',time:'',duration:120,guests:2,tableId:null,tables:[],name:'',phone:'',email:'',req:''};
