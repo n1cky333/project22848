@@ -318,6 +318,45 @@ footer{background:var(--d2);border-top:1px solid var(--border);padding:40px 0 24
 .lightbox-close{position:absolute;top:20px;right:24px;font-size:32px;
   color:var(--text2);cursor:pointer;transition:.2s;line-height:1}
 .lightbox-close:hover{color:var(--text)}
+  img{
+  max-width:100%;
+  height:auto;
+}
+
+html,body{
+  overflow-x:hidden;
+}
+
+.hall-svg-wrap{
+  background:#060911;
+  padding:10px;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+@media(max-width:480px){
+
+  .btn-primary,
+  .btn-secondary,
+  .btn{
+    width:100%;
+    padding:14px 18px;
+    text-align:center;
+  }
+
+  .hero-btns,
+  .btns{
+    flex-direction:column;
+  }
+
+  .hall-svg-wrap{
+    padding:4px;
+  }
+
+  #hall-svg{
+    min-width:760px;
+  }
+}
 </style>
 </head>
 <body>
